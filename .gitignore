@@ -66,4 +66,4 @@ atlassian-ide-plugin.xml
 
 # add exception for private libraries 
 # cordova.jar
-!Adjust/adjust/libs/cordova.jar
+!cordova*.jar
