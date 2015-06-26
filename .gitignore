@@ -74,4 +74,4 @@ google-services.json
 
 # add exception for private libraries 
 # cordova.jar
-!Adjust/adjust/libs/cordova.jar
+!cordova*.jar
