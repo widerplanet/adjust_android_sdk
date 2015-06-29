@@ -685,7 +685,7 @@ public class ActivityHandler extends HandlerThread implements IActivityHandler {
 
         Uri location = Uri.parse(deeplink);
         Intent mapIntent = new Intent(Intent.ACTION_VIEW, location);
-        mapIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        mapIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
 
         // Verify it resolves
         PackageManager packageManager = adjustConfig.context.getPackageManager();
