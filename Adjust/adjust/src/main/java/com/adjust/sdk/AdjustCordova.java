@@ -34,6 +34,7 @@ public class AdjustCordova extends CordovaPlugin implements OnAttributionChanged
     private static final String COMMAND_CREATE                      = "create";
     private static final String COMMAND_SET_ATTRIBUTION_CALLBACK    = "setAttributionCallback";
     private static final String COMMAND_TRACK_EVENT                 = "trackEvent";
+    private static final String COMMAND_SET_OFFLINE_MODE            = "setOfflineMode";
     private static final String COMMAND_ON_RESUME                   = "onResume";
     private static final String COMMAND_ON_PAUSE                    = "onPause";
     private static final String COMMAND_IS_ENABLED                  = "isEnabled";
@@ -159,6 +160,11 @@ public class AdjustCordova extends CordovaPlugin implements OnAttributionChanged
 
                 Adjust.trackEvent(adjustEvent);
             }
+
+            return true;
+        } else if (action.equals(COMMAND_SET_OFFLINE_MODE)) {
+            Boolean enabled = args.getBoolean(0);
+            Adjust.setOfflineMode(enabled);
 
             return true;
         } else if (action.equals(COMMAND_ON_PAUSE)) {
