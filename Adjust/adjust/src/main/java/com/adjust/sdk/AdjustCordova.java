@@ -4,8 +4,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import android.util.Log;
-
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaPlugin;
 import org.apache.cordova.CordovaWebView;
@@ -16,7 +14,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class AdjustCordova extends CordovaPlugin implements OnAttributionChangedListener {
-    private static final String BOOL_TRUE                           = "true";
     private static final String SDK_PREFIX                          = "cordova4.0.0";
 
     private static final String KEY_APP_TOKEN                       = "appToken";
@@ -42,21 +39,20 @@ public class AdjustCordova extends CordovaPlugin implements OnAttributionChanged
 
     private static String callbackId;
     private static CordovaWebView cordovaWebView;
-    private static boolean isAttributionCallbackSet = false;
 
     @Override
     public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
         if (action.equals(COMMAND_CREATE)) {
             JSONObject jsonParameters = args.optJSONObject(0);
-            Map<String, String> parameters = jsonObjectToMap(jsonParameters);
+            Map<String, Object> parameters = jsonObjectToMap(jsonParameters);
 
-            String appToken = parameters.get(KEY_APP_TOKEN);
-            String environment = parameters.get(KEY_ENVIRONMENT);
-            String defaultTracker = parameters.get(KEY_DEFAULT_TRACKER);
-            String processName = parameters.get(KEY_PROCESS_NAME);
+            String appToken = parameters.get(KEY_APP_TOKEN).toString();
+            String environment = parameters.get(KEY_ENVIRONMENT).toString();
+            String defaultTracker = parameters.get(KEY_DEFAULT_TRACKER).toString();
+            String processName = parameters.get(KEY_PROCESS_NAME).toString();
 
-            String logLevel = parameters.get(KEY_LOG_LEVEL);
-            String eventBufferingEnabled = parameters.get(KEY_EVENT_BUFFERING_ENABLED);
+            String logLevel = parameters.get(KEY_LOG_LEVEL).toString();
+            boolean eventBufferingEnabled = (Boolean)parameters.get(KEY_EVENT_BUFFERING_ENABLED);
 
             AdjustConfig adjustConfig = new AdjustConfig(this.cordova.getActivity(), appToken, environment);
 
@@ -81,13 +77,7 @@ public class AdjustCordova extends CordovaPlugin implements OnAttributionChanged
                 }
 
                 // Event buffering
-                if (isFieldValid(eventBufferingEnabled)) {
-                    if (eventBufferingEnabled.equals(BOOL_TRUE)) {
-                        adjustConfig.setEventBufferingEnabled(true);
-                    } else {
-                        adjustConfig.setEventBufferingEnabled(false);
-                    }
-                }
+                adjustConfig.setEventBufferingEnabled(eventBufferingEnabled);
 
                 // SDK Prefix
                 // No matter what is maybe set, we're setting it in here.
@@ -104,7 +94,7 @@ public class AdjustCordova extends CordovaPlugin implements OnAttributionChanged
                 }
 
                 // Attribution callback
-                if (isAttributionCallbackSet) {
+                if (callbackId != null) {
                     adjustConfig.setOnAttributionChangedListener(this);
                 }
 
@@ -120,21 +110,19 @@ public class AdjustCordova extends CordovaPlugin implements OnAttributionChanged
             AdjustCordova.callbackId = callbackContext.getCallbackId();
             AdjustCordova.cordovaWebView = this.webView;
 
-            isAttributionCallbackSet = true;
-
             return true;
         } else if (action.equals(COMMAND_TRACK_EVENT)) {
             JSONObject jsonParameters = args.optJSONObject(0);
-            Map<String, String> parameters = jsonObjectToMap(jsonParameters);
+            Map<String, Object> parameters = jsonObjectToMap(jsonParameters);
 
-            String eventToken = parameters.get(KEY_EVENT_TOKEN);
-            String revenue = parameters.get(KEY_REVENUE);
-            String currency = parameters.get(KEY_CURRENCY);
+            String eventToken = parameters.get(KEY_EVENT_TOKEN).toString();
+            String revenue = parameters.get(KEY_REVENUE).toString();
+            String currency = parameters.get(KEY_CURRENCY).toString();
 
-            JSONObject partnerParametersJson = new JSONObject(parameters.get(KEY_PARTNER_PARAMETERS));
-            JSONObject callbackParametersJson = new JSONObject(parameters.get(KEY_CALLBACK_PARAMETERS));
-            Map<String, String> partnerParameters = jsonObjectToMap(partnerParametersJson);
-            Map<String, String> callbackParameters = jsonObjectToMap(callbackParametersJson);
+            JSONArray partnerParametersJson = (JSONArray)parameters.get(KEY_PARTNER_PARAMETERS);
+            JSONArray callbackParametersJson = (JSONArray)parameters.get(KEY_CALLBACK_PARAMETERS);
+            String[] partnerParameters = jsonArrayToArray(partnerParametersJson);
+            String[] callbackParameters = jsonArrayToArray(callbackParametersJson);
 
             AdjustEvent adjustEvent = new AdjustEvent(eventToken);
 
@@ -150,12 +138,18 @@ public class AdjustCordova extends CordovaPlugin implements OnAttributionChanged
                     }
                 }
 
-                for (Map.Entry<String, String> parameter : callbackParameters.entrySet()) {
-                    adjustEvent.addCallbackParameter(parameter.getKey(), parameter.getValue());
+                for (int i = 0; i < callbackParameters.length; i++) {
+                    String keyValuePair = callbackParameters[i];
+                    String[] keyValue = keyValuePair.split(":", 2);
+
+                    adjustEvent.addCallbackParameter(keyValue[0], keyValue[1]);
                 }
 
-                for (Map.Entry<String, String> parameter : partnerParameters.entrySet()) {
-                    adjustEvent.addPartnerParameter(parameter.getKey(), parameter.getValue());
+                for (int i = 0; i < partnerParameters.length; i++) {
+                    String keyValuePair = partnerParameters[i];
+                    String[] keyValue = keyValuePair.split(":", 2);
+
+                    adjustEvent.addPartnerParameter(keyValue[0], keyValue[1]);
                 }
 
                 Adjust.trackEvent(adjustEvent);
@@ -216,15 +210,29 @@ public class AdjustCordova extends CordovaPlugin implements OnAttributionChanged
         return false;
     }
 
-    private Map<String, String> jsonObjectToMap(JSONObject jsonObject) throws JSONException {
-        Map<String, String> map = new HashMap<String, String>(jsonObject.length());
+    private String[] jsonArrayToArray(JSONArray jsonArray) throws JSONException {
+        if (jsonArray != null) { 
+            String[] array = new String[jsonArray.length()];
+
+            for (int i = 0; i < jsonArray.length(); i++) {
+                array[i] = jsonArray.get(i).toString();
+            }
+
+            return array;
+        }
+
+        return null;
+    }
+
+    private Map<String, Object> jsonObjectToMap(JSONObject jsonObject) throws JSONException {
+        Map<String, Object> map = new HashMap<String, Object>(jsonObject.length());
 
         @SuppressWarnings("unchecked")
         Iterator<String> jsonObjectIterator = jsonObject.keys();
 
         while (jsonObjectIterator.hasNext()) {
             String key = jsonObjectIterator.next();
-            map.put(key, jsonObject.getString(key));
+            map.put(key, jsonObject.get(key));
         }
 
         return map;
