@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import android.util.Log;
+
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaPlugin;
 import org.apache.cordova.CordovaWebView;
@@ -14,11 +16,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class AdjustCordova extends CordovaPlugin implements OnAttributionChangedListener {
-    private static final String SDK_PREFIX                          = "cordova4.0.0";
-
     private static final String KEY_APP_TOKEN                       = "appToken";
     private static final String KEY_ENVIRONMENT                     = "environment";
     private static final String KEY_LOG_LEVEL                       = "logLevel";
+    private static final String KEY_SDK_PREFIX                      = "sdkPrefix";
     private static final String KEY_PROCESS_NAME                    = "processName";
     private static final String KEY_DEFAULT_TRACKER                 = "defaultTracker";
     private static final String KEY_EVENT_BUFFERING_ENABLED         = "eventBufferingEnabled";
@@ -50,9 +51,10 @@ public class AdjustCordova extends CordovaPlugin implements OnAttributionChanged
             String environment = parameters.get(KEY_ENVIRONMENT).toString();
             String defaultTracker = parameters.get(KEY_DEFAULT_TRACKER).toString();
             String processName = parameters.get(KEY_PROCESS_NAME).toString();
+            String sdkPrefix = parameters.get(KEY_SDK_PREFIX).toString();
 
             String logLevel = parameters.get(KEY_LOG_LEVEL).toString();
-            boolean eventBufferingEnabled = (Boolean)parameters.get(KEY_EVENT_BUFFERING_ENABLED);
+            String eventBufferingEnabled = parameters.get(KEY_EVENT_BUFFERING_ENABLED).toString();
 
             AdjustConfig adjustConfig = new AdjustConfig(this.cordova.getActivity(), appToken, environment);
 
@@ -77,11 +79,16 @@ public class AdjustCordova extends CordovaPlugin implements OnAttributionChanged
                 }
 
                 // Event buffering
-                adjustConfig.setEventBufferingEnabled(eventBufferingEnabled);
+                if (isFieldValid(eventBufferingEnabled)) {
+                    if (eventBufferingEnabled.equalsIgnoreCase("true") || eventBufferingEnabled.equalsIgnoreCase("false")) {
+                        adjustConfig.setEventBufferingEnabled(Boolean.valueOf(eventBufferingEnabled));
+                    }
+                }
 
-                // SDK Prefix
-                // No matter what is maybe set, we're setting it in here.
-                adjustConfig.setSdkPrefix(SDK_PREFIX);
+                // SDK prefix
+                if (isFieldValid(sdkPrefix)) {
+                    adjustConfig.setSdkPrefix(sdkPrefix);
+                }
 
                 // Main process name
                 if (isFieldValid(processName)) {
@@ -138,18 +145,18 @@ public class AdjustCordova extends CordovaPlugin implements OnAttributionChanged
                     }
                 }
 
-                for (int i = 0; i < callbackParameters.length; i++) {
-                    String keyValuePair = callbackParameters[i];
-                    String[] keyValue = keyValuePair.split(":", 2);
+                for (int i = 0; i < callbackParameters.length; i +=2) {
+                    String key = callbackParameters[i];
+                    String value = callbackParameters[i+1];
 
-                    adjustEvent.addCallbackParameter(keyValue[0], keyValue[1]);
+                    adjustEvent.addCallbackParameter(key, value);
                 }
 
-                for (int i = 0; i < partnerParameters.length; i++) {
-                    String keyValuePair = partnerParameters[i];
-                    String[] keyValue = keyValuePair.split(":", 2);
+                for (int i = 0; i < partnerParameters.length; i += 2) {
+                    String key = partnerParameters[i];
+                    String value = partnerParameters[i+1];
 
-                    adjustEvent.addPartnerParameter(keyValue[0], keyValue[1]);
+                    adjustEvent.addPartnerParameter(key, value);
                 }
 
                 Adjust.trackEvent(adjustEvent);
