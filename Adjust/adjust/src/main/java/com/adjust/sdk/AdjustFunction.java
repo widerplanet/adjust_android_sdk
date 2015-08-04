@@ -2,9 +2,12 @@ package com.adjust.sdk;
 
 import android.net.Uri;
 import android.util.Log;
-import java.lang.*;
-
 import com.adobe.fre.*;
+import org.json.JSONObject;
+
+import java.lang.*;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by pfms on 31/07/14.
@@ -564,5 +567,35 @@ public class AdjustFunction implements FREFunction,
         AdjustExtension.context.dispatchStatusEventAsync("adjust_deferredDeeplink", response);
         
         return shouldLaunchDeeplink;
+    }
+}
+        return null;
+    }
+
+    private Map<String, String> getAsMap(FREObject freObject) throws Exception{
+        if (freObject == null) {
+            return null;
+        }
+        FREArray parameters = (FREArray) freObject.getProperty("adjust keys");
+
+        if (parameters == null) {
+            Log.e(AdjustExtension.LogTag, "getAsMap property 'adjust keys' is null");
+            return null;
+        }
+
+        int i = 0;
+        int length = (int)parameters.getLength();
+
+        Map<String, String> map = new HashMap<String, String>(length);
+
+        while (i < length) {
+            String key = parameters.getObjectAt(i).getAsString();
+            String value = freObject.getProperty(key).getAsString();
+            map.put(key,value);
+
+            i++;
+        }
+
+        return map;
     }
 }
