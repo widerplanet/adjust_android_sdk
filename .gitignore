@@ -65,3 +65,4 @@ build/
 atlassian-ide-plugin.xml
 
 # add exception for private libraries 
+!FlashRuntimeExtensions.jar
