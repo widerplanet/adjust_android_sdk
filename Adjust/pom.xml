@@ -47,6 +47,13 @@
             <groupId>com.google.android</groupId>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>FlashRuntimeExtensions</groupId>
+            <artifactId>community</artifactId>
+            <scope>system</scope>
+            <version>1</version>
+            <systemPath>${basedir}/adjust/libs/FlashRuntimeExtensions.jar</systemPath>
+        </dependency>
     </dependencies>
     <distributionManagement>
         <snapshotRepository>
