@@ -234,6 +234,7 @@ public class AdjustFunction implements FREFunction,
                 AdjustConfig adjustConfig = new AdjustConfig(freContext.getActivity(), appToken, environment);
                 adjustConfig.setLogLevel(LogLevel.VERBOSE);
                 adjustConfig.setSdkPrefix("adobe_air4.0.0");
+                adjustConfig.setOnAttributionChangedListener(this);
 
                 Adjust.onCreate(adjustConfig);
             }
