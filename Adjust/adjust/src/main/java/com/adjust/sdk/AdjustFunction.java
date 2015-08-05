@@ -230,8 +230,13 @@ public class AdjustFunction implements FREFunction,
                 String processName = freObjects[13].getAsString();
                 adjustConfig.setProcessName(processName);
             }
+            if (appToken != null && environment != null) {
+                AdjustConfig adjustConfig = new AdjustConfig(freContext.getActivity(), appToken, environment);
+                adjustConfig.setLogLevel(LogLevel.VERBOSE);
+                adjustConfig.setSdkPrefix("adobe_air4.0.0");
 
-            Adjust.onCreate(adjustConfig);
+                Adjust.onCreate(adjustConfig);
+            }
         } catch (Exception e) {
             Log.e(AdjustExtension.LogTag, e.getMessage());
         }
@@ -567,9 +572,6 @@ public class AdjustFunction implements FREFunction,
         AdjustExtension.context.dispatchStatusEventAsync("adjust_deferredDeeplink", response);
         
         return shouldLaunchDeeplink;
-    }
-}
-        return null;
     }
 
     private Map<String, String> getAsMap(FREObject freObject) throws Exception{
