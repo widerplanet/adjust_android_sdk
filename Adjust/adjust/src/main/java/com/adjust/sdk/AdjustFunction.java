@@ -6,7 +6,7 @@ import com.adobe.fre.*;
 /**
  * Created by pfms on 31/07/14.
  */
-public class AdjustFunction implements FREFunction {
+public class AdjustFunction implements FREFunction, OnAttributionChangedListener {
     private String functionName;
     private FREContext freContext;
 
@@ -40,6 +40,8 @@ public class AdjustFunction implements FREFunction {
 
     private FREObject OnCreate(FREContext freContext, FREObject[] freObjects) {
         try {
+            this.freContext = freContext;
+
             String appToken = freObjects[0].getAsString();
             String environment = freObjects[1].getAsString();
             String logLevel = freObjects[2].getAsString();
@@ -49,12 +51,14 @@ public class AdjustFunction implements FREFunction {
                 AdjustConfig adjustConfig = new AdjustConfig(freContext.getActivity(), appToken, environment);
                 adjustConfig.setLogLevel(LogLevel.VERBOSE);
                 adjustConfig.setSdkPrefix("adobe_air4.0.0");
+                adjustConfig.setOnAttributionChangedListener(this);
 
                 Adjust.onCreate(adjustConfig);
             }
         } catch (Exception e) {
             Log.e(AdjustExtension.LogTag, e.getMessage());
         }
+
         return null;
     }
 
@@ -129,5 +133,18 @@ public class AdjustFunction implements FREFunction {
             Log.e(AdjustExtension.LogTag, e.getMessage());
         }
         return null;
+    }
+
+    @Override
+    public void onAttributionChanged(AdjustAttribution attribution) {
+        String response = "trackerToken=" + attribution.trackerToken + ","
+                + "trackerName=" + attribution.trackerName + ","
+                + "campaign=" + attribution.campaign + ","
+                + "network=" + attribution.network + ","
+                + "creative=" + attribution.creative + ","
+                + "adgroup=" + attribution.adgroup + ","
+                + "clickLabel=" + attribution.clickLabel;
+
+        this.freContext.dispatchStatusEventAsync("adjust_attributionData", response);
     }
 }
