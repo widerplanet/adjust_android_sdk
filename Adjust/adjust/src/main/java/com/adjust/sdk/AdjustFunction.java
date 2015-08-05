@@ -2,10 +2,6 @@ package com.adjust.sdk;
 
 import android.util.Log;
 import com.adobe.fre.*;
-import org.json.JSONObject;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Created by pfms on 31/07/14.
@@ -27,7 +23,7 @@ public class AdjustFunction implements FREFunction {
             return TrackEvent(freContext, freObjects);
         }
         if (functionName == AdjustContext.SetEnabled) {
-            return SetEnable(freContext, freObjects);
+            return SetEnabled(freContext, freObjects);
         }
         if (functionName == AdjustContext.IsEnabled) {
             return IsEnabled(freContext, freObjects);
@@ -49,11 +45,13 @@ public class AdjustFunction implements FREFunction {
             String logLevel = freObjects[2].getAsString();
             Boolean eventBuffering = freObjects[3].getAsBool();
 
-            AdjustConfig adjustConfig = new AdjustConfig(freContext.getActivity(), appToken, environment);
-            adjustConfig.setLogLevel(LogLevel.VERBOSE);
-            adjustConfig.setSdkPrefix("adobe_air4.0.0");
+            if (appToken != null && environment != null) {
+                AdjustConfig adjustConfig = new AdjustConfig(freContext.getActivity(), appToken, environment);
+                adjustConfig.setLogLevel(LogLevel.VERBOSE);
+                adjustConfig.setSdkPrefix("adobe_air4.0.0");
 
-            Adjust.onCreate(adjustConfig);
+                Adjust.onCreate(adjustConfig);
+            }
         } catch (Exception e) {
             Log.e(AdjustExtension.LogTag, e.getMessage());
         }
@@ -63,19 +61,39 @@ public class AdjustFunction implements FREFunction {
     private FREObject TrackEvent(FREContext freContext, FREObject[] freObjects) {
         try {
             String eventToken = freObjects[0].getAsString();
+            String currency = freObjects[1].getAsString();
+            double revenue = freObjects[2].getAsDouble();
 
-            // Map<String, String> parameters = getAsMap(freObjects[1]);
+            if (eventToken != null) {
+                AdjustEvent adjustEvent = new AdjustEvent(eventToken);
 
-            AdjustEvent adjustEvent = new AdjustEvent(eventToken);
+                if (currency != null) {
+                    adjustEvent.setRevenue(revenue, currency);
+                }
 
-            Adjust.trackEvent(adjustEvent);
+                if (freObjects[3] != null) {
+                    for (int i = 0; i < ((FREArray) freObjects[3]).getLength(); i += 2) {
+                        adjustEvent.addCallbackParameter(((FREArray) freObjects[3]).getObjectAt(i).getAsString(),
+                                ((FREArray) freObjects[3]).getObjectAt(i + 1).getAsString());
+                    }
+                }
+
+                if (freObjects[4] != null) {
+                    for (int i = 0; i < ((FREArray) freObjects[4]).getLength(); i += 2) {
+                        adjustEvent.addCallbackParameter(((FREArray) freObjects[4]).getObjectAt(i).getAsString(),
+                                ((FREArray) freObjects[4]).getObjectAt(i + 1).getAsString());
+                    }
+                }
+
+                Adjust.trackEvent(adjustEvent);
+            }
         } catch (Exception e) {
             Log.e(AdjustExtension.LogTag, e.getMessage());
         }
         return null;
     }
 
-    private FREObject SetEnable(FREContext freContext, FREObject[] freObjects) {
+    private FREObject SetEnabled(FREContext freContext, FREObject[] freObjects) {
         try {
             Boolean enabled = freObjects[0].getAsBool();
 
@@ -111,32 +129,5 @@ public class AdjustFunction implements FREFunction {
             Log.e(AdjustExtension.LogTag, e.getMessage());
         }
         return null;
-    }
-
-    private Map<String, String> getAsMap(FREObject freObject) throws Exception{
-        if (freObject == null) {
-            return null;
-        }
-        FREArray parameters = (FREArray) freObject.getProperty("adjust keys");
-
-        if (parameters == null) {
-            Log.e(AdjustExtension.LogTag, "getAsMap property 'adjust keys' is null");
-            return null;
-        }
-
-        int i = 0;
-        int length = (int)parameters.getLength();
-
-        Map<String, String> map = new HashMap<String, String>(length);
-
-        while (i < length) {
-            String key = parameters.getObjectAt(i).getAsString();
-            String value = freObject.getProperty(key).getAsString();
-            map.put(key,value);
-
-            i++;
-        }
-
-        return map;
     }
 }
