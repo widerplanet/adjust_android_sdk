@@ -7,6 +7,8 @@ import com.adobe.fre.*;
  * Created by pfms on 31/07/14.
  */
 public class AdjustFunction implements FREFunction, OnAttributionChangedListener {
+    private static String sdkPrefix = "adobe_air4.0.0";
+
     private String functionName;
     private FREContext freContext;
 
@@ -44,14 +46,53 @@ public class AdjustFunction implements FREFunction, OnAttributionChangedListener
 
             String appToken = freObjects[0].getAsString();
             String environment = freObjects[1].getAsString();
-            String logLevel = freObjects[2].getAsString();
-            Boolean eventBuffering = freObjects[3].getAsBool();
 
             if (appToken != null && environment != null) {
                 AdjustConfig adjustConfig = new AdjustConfig(freContext.getActivity(), appToken, environment);
-                adjustConfig.setLogLevel(LogLevel.VERBOSE);
-                adjustConfig.setSdkPrefix("adobe_air4.0.0");
-                adjustConfig.setOnAttributionChangedListener(this);
+                adjustConfig.setSdkPrefix(sdkPrefix);
+
+                if (freObjects[2] != null) {
+                    String logLevel = freObjects[2].getAsString();
+
+                    if (logLevel != null) {
+                        if (logLevel.equals("verbose")) {
+                            adjustConfig.setLogLevel(LogLevel.VERBOSE);
+                        } else if (logLevel.equals("debug")) {
+                            adjustConfig.setLogLevel(LogLevel.DEBUG);
+                        } else if (logLevel.equals("info")) {
+                            adjustConfig.setLogLevel(LogLevel.INFO);
+                        } else if (logLevel.equals("warn")) {
+                            adjustConfig.setLogLevel(LogLevel.WARN);
+                        } else if (logLevel.equals("error")) {
+                            adjustConfig.setLogLevel(LogLevel.ERROR);
+                        } else if (logLevel.equals("assert")) {
+                            adjustConfig.setLogLevel(LogLevel.ASSERT);
+                        } else {
+                            adjustConfig.setLogLevel(LogLevel.INFO);
+                        }
+                    }
+                }
+
+                if (freObjects[3] != null) {
+                    Boolean eventBuffering = freObjects[3].getAsBool();
+                    adjustConfig.setEventBufferingEnabled(eventBuffering);
+                }
+
+                if (freObjects[4] != null) {
+                    Boolean isAttributionCallbackSet = freObjects[4].getAsBool();
+
+                    if (isAttributionCallbackSet) {
+                        adjustConfig.setOnAttributionChangedListener(this);
+                    }
+                }
+
+                if (freObjects[5] != null) {
+                    String defaultTracker = freObjects[5].getAsString();
+
+                    if (defaultTracker != null) {
+                        adjustConfig.setDefaultTracker(defaultTracker);
+                    }
+                }
 
                 Adjust.onCreate(adjustConfig);
             }
