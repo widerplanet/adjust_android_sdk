@@ -230,14 +230,23 @@ public class AdjustFunction implements FREFunction,
                 String processName = freObjects[13].getAsString();
                 adjustConfig.setProcessName(processName);
             }
-            if (appToken != null && environment != null) {
-                AdjustConfig adjustConfig = new AdjustConfig(freContext.getActivity(), appToken, environment);
-                adjustConfig.setLogLevel(LogLevel.VERBOSE);
-                adjustConfig.setSdkPrefix("adobe_air4.0.0");
-                adjustConfig.setOnAttributionChangedListener(this);
 
-                Adjust.onCreate(adjustConfig);
+            if (freObjects[14] != null) {
+                double delayStart = freObjects[14].getAsDouble();
+                adjustConfig.setDelayStart(delayStart);
             }
+
+            if (freObjects[15] != null) {
+                String userAgent = freObjects[15].getAsString();
+                adjustConfig.setUserAgent(userAgent);
+            }
+
+            if (freObjects[16] != null) {
+                boolean sendInBackground = freObjects[16].getAsBool();
+                adjustConfig.setSendInBackground(sendInBackground);
+            }
+
+            Adjust.onCreate(adjustConfig);
         } catch (Exception e) {
             Log.e(AdjustExtension.LogTag, e.getMessage());
         }
