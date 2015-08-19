@@ -1,5 +1,6 @@
 package com.adjust.sdk;
 
+import android.net.Uri;
 import android.util.Log;
 import com.adobe.fre.*;
 
@@ -35,6 +36,9 @@ public class AdjustFunction implements FREFunction, OnAttributionChangedListener
         }
         if (functionName == AdjustContext.OnPause) {
             return OnPause(freContext, freObjects);
+        }
+        if (functionName == AdjustContext.AppWillOpenUrl) {
+            return AppWillOpenUrl(freContext, freObjects);
         }
 
         return null;
@@ -135,6 +139,7 @@ public class AdjustFunction implements FREFunction, OnAttributionChangedListener
         } catch (Exception e) {
             Log.e(AdjustExtension.LogTag, e.getMessage());
         }
+
         return null;
     }
 
@@ -146,6 +151,7 @@ public class AdjustFunction implements FREFunction, OnAttributionChangedListener
         } catch (Exception e) {
             Log.e(AdjustExtension.LogTag, e.getMessage());
         }
+
         return null;
     }
 
@@ -155,6 +161,7 @@ public class AdjustFunction implements FREFunction, OnAttributionChangedListener
         } catch (Exception e) {
             Log.e(AdjustExtension.LogTag, e.getMessage());
         }
+
         return null;
     }
 
@@ -164,6 +171,7 @@ public class AdjustFunction implements FREFunction, OnAttributionChangedListener
         } catch (Exception e) {
             Log.e(AdjustExtension.LogTag, e.getMessage());
         }
+
         return null;
     }
 
@@ -173,6 +181,20 @@ public class AdjustFunction implements FREFunction, OnAttributionChangedListener
         } catch (Exception e) {
             Log.e(AdjustExtension.LogTag, e.getMessage());
         }
+
+        return null;
+    }
+
+    private FREObject AppWillOpenUrl(FREContext freContext, FREObject[] freObjects) {
+        try {
+            String url = freObjects[0].getAsString();
+            Uri uri = Uri.parse(url);
+
+            Adjust.appWillOpenUrl(uri);
+        } catch (Exception e) {
+            Log.e(AdjustExtension.LogTag, e.getMessage());
+        }
+
         return null;
     }
 
