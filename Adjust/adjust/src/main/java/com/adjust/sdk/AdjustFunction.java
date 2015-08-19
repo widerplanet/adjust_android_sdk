@@ -53,6 +53,9 @@ public class AdjustFunction implements FREFunction,
         if (functionName == AdjustContext.OnPause) {
             return OnPause(freContext, freObjects);
         }
+        if (functionName == AdjustContext.AppWillOpenUrl) {
+            return AppWillOpenUrl(freContext, freObjects);
+        }
 
         if (functionName == AdjustContext.AppWillOpenUrl) {
             return AppWillOpenUrl(freContext, freObjects);
@@ -301,7 +304,7 @@ public class AdjustFunction implements FREFunction,
             Log.e(AdjustExtension.LogTag, e.getMessage());
         }
 
-       return null;
+        return null;
     }
 
     private FREObject SetEnabled(FREContext freContext, FREObject[] freObjects) {
