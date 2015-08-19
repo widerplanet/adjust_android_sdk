@@ -16,6 +16,7 @@ public class AdjustContext extends FREContext {
     public static String IsEnabled = "isEnabled";
     public static String OnResume = "onResume";
     public static String OnPause = "onPause";
+    public static String AppWillOpenUrl = "appWillOpenUrl";
 
     @Override
     public Map<String, FREFunction> getFunctions() {
@@ -27,6 +28,7 @@ public class AdjustContext extends FREContext {
         functions.put(AdjustContext.IsEnabled, new AdjustFunction(AdjustContext.IsEnabled));
         functions.put(AdjustContext.OnResume, new AdjustFunction(AdjustContext.OnResume));
         functions.put(AdjustContext.OnPause, new AdjustFunction(AdjustContext.OnPause));
+        functions.put(AdjustContext.AppWillOpenUrl, new AdjustFunction(AdjustContext.AppWillOpenUrl));
 
         return functions;
     }
