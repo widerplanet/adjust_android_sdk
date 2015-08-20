@@ -17,6 +17,8 @@ public class AdjustContext extends FREContext {
     public static String OnResume = "onResume";
     public static String OnPause = "onPause";
     public static String AppWillOpenUrl = "appWillOpenUrl";
+    public static String SetOfflineMode = "setOfflineMode";
+    public static String SetReferrer = "setReferrer";
 
     @Override
     public Map<String, FREFunction> getFunctions() {
@@ -29,6 +31,8 @@ public class AdjustContext extends FREContext {
         functions.put(AdjustContext.OnResume, new AdjustFunction(AdjustContext.OnResume));
         functions.put(AdjustContext.OnPause, new AdjustFunction(AdjustContext.OnPause));
         functions.put(AdjustContext.AppWillOpenUrl, new AdjustFunction(AdjustContext.AppWillOpenUrl));
+        functions.put(AdjustContext.SetOfflineMode, new AdjustFunction(AdjustContext.SetOfflineMode));
+        functions.put(AdjustContext.SetReferrer, new AdjustFunction(AdjustContext.SetReferrer));
 
         return functions;
     }
