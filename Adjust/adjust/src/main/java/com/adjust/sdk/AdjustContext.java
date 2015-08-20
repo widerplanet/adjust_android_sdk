@@ -20,6 +20,9 @@ public class AdjustContext extends FREContext {
     public static String SetOfflineMode = "setOfflineMode";
     public static String SetReferrer = "setReferrer";
 
+    // iOS methods
+    public static String SetDeviceToken = "setDeviceToken";
+
     @Override
     public Map<String, FREFunction> getFunctions() {
         Map<String, FREFunction> functions = new HashMap<String, FREFunction>();
@@ -33,6 +36,8 @@ public class AdjustContext extends FREContext {
         functions.put(AdjustContext.AppWillOpenUrl, new AdjustFunction(AdjustContext.AppWillOpenUrl));
         functions.put(AdjustContext.SetOfflineMode, new AdjustFunction(AdjustContext.SetOfflineMode));
         functions.put(AdjustContext.SetReferrer, new AdjustFunction(AdjustContext.SetReferrer));
+
+        functions.put(AdjustContext.SetDeviceToken, new AdjustFunction(AdjustContext.SetDeviceToken));
 
         return functions;
     }
