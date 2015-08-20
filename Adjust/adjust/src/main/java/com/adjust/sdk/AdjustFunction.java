@@ -393,6 +393,7 @@ public class AdjustFunction implements FREFunction,
     }
 
     private FREObject SetDeviceToken(FREContext freContext, FREObject[] freObjects) {
+<<<<<<< HEAD
         try {
             String token = freObjects[0].getAsString();
 
@@ -488,6 +489,8 @@ public class AdjustFunction implements FREFunction,
             Log.e(AdjustExtension.LogTag, e.getMessage());
         }
 
+=======
+>>>>>>> Adding dummy implementaions for iOS methods
         return null;
     }
 

@@ -32,6 +32,9 @@ public class AdjustContext extends FREContext {
     // iOS methods
     public static String GetIdfa = "getIdfa";
 
+    // iOS methods
+    public static String SetDeviceToken = "setDeviceToken";
+
     @Override
     public Map<String, FREFunction> getFunctions() {
         Map<String, FREFunction> functions = new HashMap<String, FREFunction>();
@@ -53,6 +56,8 @@ public class AdjustContext extends FREContext {
         functions.put(AdjustContext.AddSessionPartnerParameter, new AdjustFunction(AdjustContext.AddSessionPartnerParameter));
         functions.put(AdjustContext.RemoveSessionPartnerParameter, new AdjustFunction(AdjustContext.RemoveSessionPartnerParameter));
         functions.put(AdjustContext.ResetSessionPartnerParameters, new AdjustFunction(AdjustContext.ResetSessionPartnerParameters));
+        functions.put(AdjustContext.SetDeviceToken, new AdjustFunction(AdjustContext.SetDeviceToken));
+
         functions.put(AdjustContext.SetDeviceToken, new AdjustFunction(AdjustContext.SetDeviceToken));
 
         return functions;
