@@ -104,6 +104,14 @@ public class AdjustFunction implements FREFunction, OnAttributionChangedListener
                     }
                 }
 
+                if (freObjects[7] != null) {
+                    String sdkPrefix = freObjects[7].getAsString();
+
+                    if (sdkPrefix != null) {
+                        adjustConfig.setSdkPrefix(sdkPrefix);
+                    }
+                }
+
                 Adjust.onCreate(adjustConfig);
             }
         } catch (Exception e) {
@@ -225,6 +233,10 @@ public class AdjustFunction implements FREFunction, OnAttributionChangedListener
             Log.e(AdjustExtension.LogTag, e.getMessage());
         }
 
+        return null;
+    }
+
+    private FREObject SetDeviceToken(FREContext freContext, FREObject[] freObjects) {
         return null;
     }
 
