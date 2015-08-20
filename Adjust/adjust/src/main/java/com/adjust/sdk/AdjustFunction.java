@@ -40,6 +40,12 @@ public class AdjustFunction implements FREFunction, OnAttributionChangedListener
         if (functionName == AdjustContext.AppWillOpenUrl) {
             return AppWillOpenUrl(freContext, freObjects);
         }
+        if (functionName == AdjustContext.SetOfflineMode) {
+            return SetOfflineMode(freContext, freObjects);
+        }
+        if (functionName == AdjustContext.SetReferrer) {
+            return SetReferrer(freContext, freObjects);
+        }
 
         return null;
     }
@@ -191,6 +197,30 @@ public class AdjustFunction implements FREFunction, OnAttributionChangedListener
             Uri uri = Uri.parse(url);
 
             Adjust.appWillOpenUrl(uri);
+        } catch (Exception e) {
+            Log.e(AdjustExtension.LogTag, e.getMessage());
+        }
+
+        return null;
+    }
+
+    private FREObject SetOfflineMode(FREContext freContext, FREObject[] freObjects) {
+        try {
+            Boolean isOffline = freObjects[0].getAsBool();
+
+            Adjust.setOfflineMode(isOffline);
+        } catch (Exception e) {
+            Log.e(AdjustExtension.LogTag, e.getMessage());
+        }
+
+        return null;
+    }
+
+    private FREObject SetReferrer(FREContext freContext, FREObject[] freObjects) {
+        try {
+            String referrer = freObjects[0].getAsString();
+
+            Adjust.setReferrer(referrer);
         } catch (Exception e) {
             Log.e(AdjustExtension.LogTag, e.getMessage());
         }
