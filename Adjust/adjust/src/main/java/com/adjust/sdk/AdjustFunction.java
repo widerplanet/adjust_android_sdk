@@ -56,6 +56,12 @@ public class AdjustFunction implements FREFunction,
         if (functionName == AdjustContext.AppWillOpenUrl) {
             return AppWillOpenUrl(freContext, freObjects);
         }
+        if (functionName == AdjustContext.SetOfflineMode) {
+            return SetOfflineMode(freContext, freObjects);
+        }
+        if (functionName == AdjustContext.SetReferrer) {
+            return SetReferrer(freContext, freObjects);
+        }
 
         if (functionName == AdjustContext.AppWillOpenUrl) {
             return AppWillOpenUrl(freContext, freObjects);
