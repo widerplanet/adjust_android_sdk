@@ -2,6 +2,7 @@ package com.adjust.sdk;
 
 import android.net.Uri;
 import android.util.Log;
+
 import com.adobe.fre.*;
 
 /**
@@ -54,66 +55,72 @@ public class AdjustFunction implements FREFunction, OnAttributionChangedListener
         try {
             this.freContext = freContext;
 
-            String appToken = freObjects[0].getAsString();
-            String environment = freObjects[1].getAsString();
+            String appToken = null;
+            String environment = null;
 
-            if (appToken != null && environment != null) {
-                AdjustConfig adjustConfig = new AdjustConfig(freContext.getActivity(), appToken, environment);
-                adjustConfig.setSdkPrefix(sdkPrefix);
-
-                if (freObjects[2] != null) {
-                    String logLevel = freObjects[2].getAsString();
-
-                    if (logLevel != null) {
-                        if (logLevel.equals("verbose")) {
-                            adjustConfig.setLogLevel(LogLevel.VERBOSE);
-                        } else if (logLevel.equals("debug")) {
-                            adjustConfig.setLogLevel(LogLevel.DEBUG);
-                        } else if (logLevel.equals("info")) {
-                            adjustConfig.setLogLevel(LogLevel.INFO);
-                        } else if (logLevel.equals("warn")) {
-                            adjustConfig.setLogLevel(LogLevel.WARN);
-                        } else if (logLevel.equals("error")) {
-                            adjustConfig.setLogLevel(LogLevel.ERROR);
-                        } else if (logLevel.equals("assert")) {
-                            adjustConfig.setLogLevel(LogLevel.ASSERT);
-                        } else {
-                            adjustConfig.setLogLevel(LogLevel.INFO);
-                        }
-                    }
-                }
-
-                if (freObjects[3] != null) {
-                    Boolean eventBuffering = freObjects[3].getAsBool();
-                    adjustConfig.setEventBufferingEnabled(eventBuffering);
-                }
-
-                if (freObjects[4] != null) {
-                    Boolean isAttributionCallbackSet = freObjects[4].getAsBool();
-
-                    if (isAttributionCallbackSet) {
-                        adjustConfig.setOnAttributionChangedListener(this);
-                    }
-                }
-
-                if (freObjects[5] != null) {
-                    String defaultTracker = freObjects[5].getAsString();
-
-                    if (defaultTracker != null) {
-                        adjustConfig.setDefaultTracker(defaultTracker);
-                    }
-                }
-
-                if (freObjects[7] != null) {
-                    String sdkPrefix = freObjects[7].getAsString();
-
-                    if (sdkPrefix != null) {
-                        adjustConfig.setSdkPrefix(sdkPrefix);
-                    }
-                }
-
-                Adjust.onCreate(adjustConfig);
+            if (freObjects[0] != null) {
+                appToken = freObjects[0].getAsString();
             }
+
+            if (freObjects[1] != null) {
+                environment = freObjects[1].getAsString();
+            }
+
+            AdjustConfig adjustConfig = new AdjustConfig(freContext.getActivity(), appToken, environment);
+            adjustConfig.setSdkPrefix(sdkPrefix);
+
+            if (freObjects[2] != null) {
+                String logLevel = freObjects[2].getAsString();
+
+                if (logLevel != null) {
+                    if (logLevel.equals("verbose")) {
+                        adjustConfig.setLogLevel(LogLevel.VERBOSE);
+                    } else if (logLevel.equals("debug")) {
+                        adjustConfig.setLogLevel(LogLevel.DEBUG);
+                    } else if (logLevel.equals("info")) {
+                        adjustConfig.setLogLevel(LogLevel.INFO);
+                    } else if (logLevel.equals("warn")) {
+                        adjustConfig.setLogLevel(LogLevel.WARN);
+                    } else if (logLevel.equals("error")) {
+                        adjustConfig.setLogLevel(LogLevel.ERROR);
+                    } else if (logLevel.equals("assert")) {
+                        adjustConfig.setLogLevel(LogLevel.ASSERT);
+                    } else {
+                        adjustConfig.setLogLevel(LogLevel.INFO);
+                    }
+                }
+            }
+
+            if (freObjects[3] != null) {
+                Boolean eventBuffering = freObjects[3].getAsBool();
+                adjustConfig.setEventBufferingEnabled(eventBuffering);
+            }
+
+            if (freObjects[4] != null) {
+                Boolean isAttributionCallbackSet = freObjects[4].getAsBool();
+
+                if (isAttributionCallbackSet) {
+                    adjustConfig.setOnAttributionChangedListener(this);
+                }
+            }
+
+            if (freObjects[5] != null) {
+                String defaultTracker = freObjects[5].getAsString();
+
+                if (defaultTracker != null) {
+                    adjustConfig.setDefaultTracker(defaultTracker);
+                }
+            }
+
+            if (freObjects[7] != null) {
+                String sdkPrefix = freObjects[7].getAsString();
+
+                if (sdkPrefix != null) {
+                    adjustConfig.setSdkPrefix(sdkPrefix);
+                }
+            }
+
+            Adjust.onCreate(adjustConfig);
         } catch (Exception e) {
             Log.e(AdjustExtension.LogTag, e.getMessage());
         }
@@ -123,33 +130,41 @@ public class AdjustFunction implements FREFunction, OnAttributionChangedListener
 
     private FREObject TrackEvent(FREContext freContext, FREObject[] freObjects) {
         try {
-            String eventToken = freObjects[0].getAsString();
-            String currency = freObjects[1].getAsString();
-            double revenue = freObjects[2].getAsDouble();
+            String eventToken = null;
+            String currency = null;
+            double revenue = 0;
 
-            if (eventToken != null) {
-                AdjustEvent adjustEvent = new AdjustEvent(eventToken);
-
-                if (currency != null) {
-                    adjustEvent.setRevenue(revenue, currency);
-                }
-
-                if (freObjects[3] != null) {
-                    for (int i = 0; i < ((FREArray) freObjects[3]).getLength(); i += 2) {
-                        adjustEvent.addCallbackParameter(((FREArray) freObjects[3]).getObjectAt(i).getAsString(),
-                                ((FREArray) freObjects[3]).getObjectAt(i + 1).getAsString());
-                    }
-                }
-
-                if (freObjects[4] != null) {
-                    for (int i = 0; i < ((FREArray) freObjects[4]).getLength(); i += 2) {
-                        adjustEvent.addCallbackParameter(((FREArray) freObjects[4]).getObjectAt(i).getAsString(),
-                                ((FREArray) freObjects[4]).getObjectAt(i + 1).getAsString());
-                    }
-                }
-
-                Adjust.trackEvent(adjustEvent);
+            if (freObjects[0] != null) {
+                eventToken = freObjects[0].getAsString();
             }
+
+            AdjustEvent adjustEvent = new AdjustEvent(eventToken);
+
+            if (freObjects[1] != null) {
+                currency = freObjects[1].getAsString();
+
+                if (freObjects[2] != null) {
+                    revenue = freObjects[2].getAsDouble();
+                }
+
+                adjustEvent.setRevenue(revenue, currency);
+            }
+
+            if (freObjects[3] != null) {
+                for (int i = 0; i < ((FREArray) freObjects[3]).getLength(); i += 2) {
+                    adjustEvent.addCallbackParameter(((FREArray) freObjects[3]).getObjectAt(i).getAsString(),
+                            ((FREArray) freObjects[3]).getObjectAt(i + 1).getAsString());
+                }
+            }
+
+            if (freObjects[4] != null) {
+                for (int i = 0; i < ((FREArray) freObjects[4]).getLength(); i += 2) {
+                    adjustEvent.addCallbackParameter(((FREArray) freObjects[4]).getObjectAt(i).getAsString(),
+                            ((FREArray) freObjects[4]).getObjectAt(i + 1).getAsString());
+                }
+            }
+
+            Adjust.trackEvent(adjustEvent);
         } catch (Exception e) {
             Log.e(AdjustExtension.LogTag, e.getMessage());
         }
