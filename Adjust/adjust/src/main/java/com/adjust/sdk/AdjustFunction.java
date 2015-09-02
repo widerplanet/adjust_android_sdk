@@ -2,12 +2,9 @@ package com.adjust.sdk;
 
 import android.net.Uri;
 import android.util.Log;
-import com.adobe.fre.*;
-import org.json.JSONObject;
-
 import java.lang.*;
-import java.util.HashMap;
-import java.util.Map;
+
+import com.adobe.fre.*;
 
 /**
  * Created by pfms on 31/07/14.
@@ -52,15 +49,6 @@ public class AdjustFunction implements FREFunction,
 
         if (functionName == AdjustContext.OnPause) {
             return OnPause(freContext, freObjects);
-        }
-        if (functionName == AdjustContext.AppWillOpenUrl) {
-            return AppWillOpenUrl(freContext, freObjects);
-        }
-        if (functionName == AdjustContext.SetOfflineMode) {
-            return SetOfflineMode(freContext, freObjects);
-        }
-        if (functionName == AdjustContext.SetReferrer) {
-            return SetReferrer(freContext, freObjects);
         }
 
         if (functionName == AdjustContext.AppWillOpenUrl) {
@@ -109,6 +97,10 @@ public class AdjustFunction implements FREFunction,
 
         if (functionName == AdjustContext.SetDeviceToken) {
             return SetDeviceToken(freContext, freObjects);
+        }
+        
+        if (functionName == AdjustContext.SendFirstPackages) {
+            return SendFirstPackages(freContext, freObjects);
         }
 
         return null;
@@ -295,7 +287,7 @@ public class AdjustFunction implements FREFunction,
 
             if (freObjects[4] != null) {
                 for (int i = 0; i < ((FREArray) freObjects[4]).getLength(); i += 2) {
-                    adjustEvent.addCallbackParameter(((FREArray) freObjects[4]).getObjectAt(i).getAsString(),
+                    adjustEvent.addPartnerParameter(((FREArray) freObjects[4]).getObjectAt(i).getAsString(),
                             ((FREArray) freObjects[4]).getObjectAt(i + 1).getAsString());
                 }
             }
@@ -310,7 +302,7 @@ public class AdjustFunction implements FREFunction,
             Log.e(AdjustExtension.LogTag, e.getMessage());
         }
 
-        return null;
+       return null;
     }
 
     private FREObject SetEnabled(FREContext freContext, FREObject[] freObjects) {
@@ -368,6 +360,16 @@ public class AdjustFunction implements FREFunction,
         return null;
     }
 
+    private FREObject SendFirstPackages(FREContext freContext, FREObject[] freObjects) {
+        try {
+            Adjust.sendFirstPackages();
+        } catch (Exception e) {
+            Log.e(AdjustExtension.LogTag, e.getMessage());
+        }
+
+        return null;
+    }
+
     private FREObject SetOfflineMode(FREContext freContext, FREObject[] freObjects) {
         try {
             Boolean isOffline = freObjects[0].getAsBool();
@@ -393,7 +395,6 @@ public class AdjustFunction implements FREFunction,
     }
 
     private FREObject SetDeviceToken(FREContext freContext, FREObject[] freObjects) {
-<<<<<<< HEAD
         try {
             String token = freObjects[0].getAsString();
 
@@ -489,8 +490,6 @@ public class AdjustFunction implements FREFunction,
             Log.e(AdjustExtension.LogTag, e.getMessage());
         }
 
-=======
->>>>>>> Adding dummy implementaions for iOS methods
         return null;
     }
 
@@ -500,13 +499,13 @@ public class AdjustFunction implements FREFunction,
             return;
         }
 
-        String response = "trackerToken=" + attribution.trackerToken + ","
-            + "trackerName=" + attribution.trackerName + ","
-            + "campaign=" + attribution.campaign + ","
-            + "network=" + attribution.network + ","
-            + "creative=" + attribution.creative + ","
-            + "adgroup=" + attribution.adgroup + ","
-            + "clickLabel=" + attribution.clickLabel;
+        String response = "trackerToken==" + attribution.trackerToken + "__"
+            + "trackerName==" + attribution.trackerName + "__"
+            + "campaign==" + attribution.campaign + "__"
+            + "network==" + attribution.network + "__"
+            + "creative==" + attribution.creative + "__"
+            + "adgroup==" + attribution.adgroup + "__"
+            + "clickLabel==" + attribution.clickLabel;
 
         AdjustExtension.context.dispatchStatusEventAsync("adjust_attributionData", response);
     }
@@ -518,13 +517,13 @@ public class AdjustFunction implements FREFunction,
         }
 
         StringBuilder response = new StringBuilder();
-        response.append("message=" + event.message + ","
-                + "timestamp=" + event.timestamp + ","
-                + "adid=" + event.adid + ","
-                + "eventToken=" + event.eventToken + ",");
+        response.append("message==" + event.message + "__"
+                + "timeStamp==" + event.timestamp + "__"
+                + "adid==" + event.adid + "__"
+                + "eventToken==" + event.eventToken + "__");
 
         if (event.jsonResponse != null) {
-            response.append("jsonResponse=" + event.jsonResponse.toString());
+            response.append("jsonResponse==" + event.jsonResponse.toString());
         }
 
         AdjustExtension.context.dispatchStatusEventAsync("adjust_eventTrackingSucceeded", response.toString());
@@ -537,14 +536,14 @@ public class AdjustFunction implements FREFunction,
         }
 
         StringBuilder response = new StringBuilder();
-        response.append("message=" + event.message + ","
-                + "timestamp=" + event.timestamp + ","
-                + "adid=" + event.adid + ","
-                + "eventToken=" + event.eventToken + ","
-                + "willRetry=" + event.willRetry + ",");
+        response.append("message==" + event.message + "__"
+                + "timeStamp==" + event.timestamp + "__"
+                + "adid==" + event.adid + "__"
+                + "eventToken==" + event.eventToken + "__"
+                + "willRetry==" + event.willRetry + "__");
 
         if (event.jsonResponse != null) {
-            response.append("jsonResponse=" + event.jsonResponse.toString());
+            response.append("jsonResponse==" + event.jsonResponse.toString());
         }
 
         AdjustExtension.context.dispatchStatusEventAsync("adjust_eventTrackingFailed", response.toString());
@@ -557,12 +556,12 @@ public class AdjustFunction implements FREFunction,
         }
 
         StringBuilder response = new StringBuilder();
-        response.append("message=" + event.message + ","
-                + "timestamp=" + event.timestamp + ","
-                + "adid=" + event.adid + ",");
+        response.append("message==" + event.message + "__"
+                + "timeStamp==" + event.timestamp + "__"
+                + "adid==" + event.adid + "__");
 
         if (event.jsonResponse != null) {
-            response.append("jsonResponse=" + event.jsonResponse.toString());
+            response.append("jsonResponse==" + event.jsonResponse.toString());
         }
 
         AdjustExtension.context.dispatchStatusEventAsync("adjust_sessionTrackingSucceeded", response.toString());
@@ -575,13 +574,13 @@ public class AdjustFunction implements FREFunction,
         }
 
         StringBuilder response = new StringBuilder();
-        response.append("message=" + event.message + ","
-                + "timestamp=" + event.timestamp + ","
-                + "adid=" + event.adid + ","
-                + "willRetry=" + event.willRetry + ",");
+        response.append("message==" + event.message + "__"
+                + "timeStamp==" + event.timestamp + "__"
+                + "adid==" + event.adid + "__"
+                + "willRetry==" + event.willRetry + "__");
 
         if (event.jsonResponse != null) {
-            response.append("jsonResponse=" + event.jsonResponse.toString());
+            response.append("jsonResponse==" + event.jsonResponse.toString());
         }
 
         AdjustExtension.context.dispatchStatusEventAsync("adjust_sessionTrackingFailed", response.toString());
@@ -594,32 +593,5 @@ public class AdjustFunction implements FREFunction,
         AdjustExtension.context.dispatchStatusEventAsync("adjust_deferredDeeplink", response);
         
         return shouldLaunchDeeplink;
-    }
-
-    private Map<String, String> getAsMap(FREObject freObject) throws Exception{
-        if (freObject == null) {
-            return null;
-        }
-        FREArray parameters = (FREArray) freObject.getProperty("adjust keys");
-
-        if (parameters == null) {
-            Log.e(AdjustExtension.LogTag, "getAsMap property 'adjust keys' is null");
-            return null;
-        }
-
-        int i = 0;
-        int length = (int)parameters.getLength();
-
-        Map<String, String> map = new HashMap<String, String>(length);
-
-        while (i < length) {
-            String key = parameters.getObjectAt(i).getAsString();
-            String value = freObject.getProperty(key).getAsString();
-            map.put(key,value);
-
-            i++;
-        }
-
-        return map;
     }
 }
