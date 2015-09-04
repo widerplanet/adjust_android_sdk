@@ -9,8 +9,6 @@ import com.adobe.fre.*;
  * Created by pfms on 31/07/14.
  */
 public class AdjustFunction implements FREFunction, OnAttributionChangedListener {
-    private static String sdkPrefix = "adobe_air4.0.0";
-
     private String functionName;
     private FREContext freContext;
 
@@ -67,7 +65,6 @@ public class AdjustFunction implements FREFunction, OnAttributionChangedListener
             }
 
             AdjustConfig adjustConfig = new AdjustConfig(freContext.getActivity(), appToken, environment);
-            adjustConfig.setSdkPrefix(sdkPrefix);
 
             if (freObjects[2] != null) {
                 String logLevel = freObjects[2].getAsString();
