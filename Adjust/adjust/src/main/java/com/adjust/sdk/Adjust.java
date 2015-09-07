@@ -32,7 +32,6 @@ public class Adjust {
     }
 
     public static void onCreate(AdjustConfig adjustConfig) {
-        adjustConfig.setSdkPrefix("cocos2d-x4.0.1");
         AdjustInstance adjustInstance = Adjust.getDefaultInstance();
         adjustInstance.onCreate(adjustConfig);
     }
