@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import android.net.Uri;
 import android.util.Log;
 
 import org.apache.cordova.CallbackContext;
@@ -37,6 +38,15 @@ public class AdjustCordova extends CordovaPlugin implements OnAttributionChanged
     private static final String COMMAND_ON_PAUSE                    = "onPause";
     private static final String COMMAND_IS_ENABLED                  = "isEnabled";
     private static final String COMMAND_SET_ENABLED                 = "setEnabled";
+    private static final String COMMAND_APP_WILL_OPEN_URL           = "appWillOpenUrl";
+
+    private static final String ATTRIBUTION_TRACKER_TOKEN           = "trackerToken";
+    private static final String ATTRIBUTION_TRACKER_NAME            = "trackerName";
+    private static final String ATTRIBUTION_NETWORK                 = "network";
+    private static final String ATTRIBUTION_CAMPAIGN                = "campaign";
+    private static final String ATTRIBUTION_ADGROUP                 = "adgroup";
+    private static final String ATTRIBUTION_CREATIVE                = "creative";
+    private static final String ATTRIBUTION_CLICK_LABEL             = "clickLabel";
 
     private static String callbackId;
     private static CordovaWebView cordovaWebView;
@@ -187,6 +197,13 @@ public class AdjustCordova extends CordovaPlugin implements OnAttributionChanged
             callbackContext.sendPluginResult(pluginResult);
 
             return true;
+        } else if (action.equals(COMMAND_APP_WILL_OPEN_URL)) {
+            String url = args.getString(0);
+            Uri uri = Uri.parse(url);
+
+            Adjust.appWillOpenUrl(uri);
+
+            return true;
         }
 
         String errorMessage = String.format("Invalid call (%s)", action);
@@ -250,51 +267,51 @@ public class AdjustCordova extends CordovaPlugin implements OnAttributionChanged
 
         // Tracker token
         if (attribution.trackerToken != null) {
-            attributionDataDic.put("trackerToken", attribution.trackerToken);
+            attributionDataDic.put(ATTRIBUTION_TRACKER_TOKEN, attribution.trackerToken);
         } else {
-            attributionDataDic.put("trackerToken", "");
+            attributionDataDic.put(ATTRIBUTION_TRACKER_TOKEN, "");
         }
 
         // Tracker name
         if (attribution.trackerName != null) {
-            attributionDataDic.put("trackerName", attribution.trackerName);
+            attributionDataDic.put(ATTRIBUTION_TRACKER_NAME, attribution.trackerName);
         } else {
-            attributionDataDic.put("trackerName", "");
+            attributionDataDic.put(ATTRIBUTION_TRACKER_NAME, "");
         }
 
         // Network
         if (attribution.network != null) {
-            attributionDataDic.put("network", attribution.network);
+            attributionDataDic.put(ATTRIBUTION_NETWORK, attribution.network);
         } else {
-            attributionDataDic.put("network", "");
+            attributionDataDic.put(ATTRIBUTION_NETWORK, "");
         }
 
         // Campaign
         if (attribution.campaign != null) {
-            attributionDataDic.put("campaign", attribution.campaign);
+            attributionDataDic.put(ATTRIBUTION_CAMPAIGN, attribution.campaign);
         } else {
-            attributionDataDic.put("campaign", "");
+            attributionDataDic.put(ATTRIBUTION_CAMPAIGN, "");
         }
 
         // Adgroup
         if (attribution.adgroup != null) {
-            attributionDataDic.put("adgroup", attribution.adgroup);
+            attributionDataDic.put(ATTRIBUTION_ADGROUP, attribution.adgroup);
         } else {
-            attributionDataDic.put("adgroup", "");
+            attributionDataDic.put(ATTRIBUTION_ADGROUP, "");
         }
 
         // Creative
         if (attribution.creative != null) {
-            attributionDataDic.put("creative", attribution.creative);
+            attributionDataDic.put(ATTRIBUTION_CREATIVE, attribution.creative);
         } else {
-            attributionDataDic.put("creative", "");
+            attributionDataDic.put(ATTRIBUTION_CREATIVE, "");
         }
 
         // Click label
         if (attribution.clickLabel != null) {
-            attributionDataDic.put("clickLabel", attribution.clickLabel);
+            attributionDataDic.put(ATTRIBUTION_CLICK_LABEL, attribution.clickLabel);
         } else {
-            attributionDataDic.put("clickLabel", "");
+            attributionDataDic.put(ATTRIBUTION_CLICK_LABEL, "");
         }
 
         return attributionDataDic;
