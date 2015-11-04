@@ -31,7 +31,7 @@ public class Adjust {
     }
 
     public static void onCreate(AdjustConfig adjustConfig) {
-        adjustConfig.setSdkPrefix("xamarin4.0.1");
+        adjustConfig.setSdkPrefix("xamarin4.0.2");
         AdjustInstance adjustInstance = Adjust.getDefaultInstance();
         adjustInstance.onCreate(adjustConfig);
     }
