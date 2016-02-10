@@ -5,7 +5,6 @@ import java.util.Iterator;
 import java.util.Map;
 
 import android.net.Uri;
-import android.util.Log;
 
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaPlugin;
@@ -16,7 +15,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class AdjustCordova extends CordovaPlugin implements OnAttributionChangedListener {
+public class AdjustCordova extends CordovaPlugin implements OnAttributionChangedListener, OnDeviceIdsRead {
     private static final String KEY_APP_TOKEN                       = "appToken";
     private static final String KEY_ENVIRONMENT                     = "environment";
     private static final String KEY_LOG_LEVEL                       = "logLevel";
@@ -39,6 +38,8 @@ public class AdjustCordova extends CordovaPlugin implements OnAttributionChanged
     private static final String COMMAND_IS_ENABLED                  = "isEnabled";
     private static final String COMMAND_SET_ENABLED                 = "setEnabled";
     private static final String COMMAND_APP_WILL_OPEN_URL           = "appWillOpenUrl";
+    private static final String COMMAND_GET_GOOGLE_AD_ID            = "getGoogleAdId";
+    private static final String COMMAND_SET_GOOGLE_AD_ID_CALLBACK   = "setGoogleAdIdCallback";
 
     private static final String ATTRIBUTION_TRACKER_TOKEN           = "trackerToken";
     private static final String ATTRIBUTION_TRACKER_NAME            = "trackerName";
@@ -48,7 +49,8 @@ public class AdjustCordova extends CordovaPlugin implements OnAttributionChanged
     private static final String ATTRIBUTION_CREATIVE                = "creative";
     private static final String ATTRIBUTION_CLICK_LABEL             = "clickLabel";
 
-    private static String callbackId;
+    private static String googleAdIdCallbackId;
+    private static String attributionCallbackId;
     private static CordovaWebView cordovaWebView;
 
     @Override
@@ -111,7 +113,7 @@ public class AdjustCordova extends CordovaPlugin implements OnAttributionChanged
                 }
 
                 // Attribution callback
-                if (callbackId != null) {
+                if (attributionCallbackId != null) {
                     adjustConfig.setOnAttributionChangedListener(this);
                 }
 
@@ -124,7 +126,12 @@ public class AdjustCordova extends CordovaPlugin implements OnAttributionChanged
 
             return true;
         } else if (action.equals(COMMAND_SET_ATTRIBUTION_CALLBACK)) {
-            AdjustCordova.callbackId = callbackContext.getCallbackId();
+            AdjustCordova.attributionCallbackId = callbackContext.getCallbackId();
+            AdjustCordova.cordovaWebView = this.webView;
+
+            return true;
+        } else if (action.equals(COMMAND_SET_GOOGLE_AD_ID_CALLBACK)) {
+            AdjustCordova.googleAdIdCallbackId = callbackContext.getCallbackId();
             AdjustCordova.cordovaWebView = this.webView;
 
             return true;
@@ -204,6 +211,13 @@ public class AdjustCordova extends CordovaPlugin implements OnAttributionChanged
             Adjust.appWillOpenUrl(uri);
 
             return true;
+        } else if (action.equals(COMMAND_GET_GOOGLE_AD_ID)) {
+            // Google ad id callback
+            if (googleAdIdCallbackId != null) {
+                Adjust.getGoogleAdId(this.cordova.getActivity(), this);
+            }
+
+            return true;
         }
 
         String errorMessage = String.format("Invalid call (%s)", action);
@@ -215,12 +229,21 @@ public class AdjustCordova extends CordovaPlugin implements OnAttributionChanged
     }
 
     @Override
+    public void onGoogleAdIdRead(String playAdId) {
+        PluginResult pluginResult = new PluginResult(Status.OK, playAdId);
+        pluginResult.setKeepCallback(true);
+
+        CallbackContext callbackResponseData = new CallbackContext(AdjustCordova.googleAdIdCallbackId, AdjustCordova.cordovaWebView);
+        callbackResponseData.sendPluginResult(pluginResult);
+    }
+
+    @Override
     public void onAttributionChanged(AdjustAttribution attribution) {
         JSONObject attributionJsonData = new JSONObject(getAttributionDictionary(attribution));
         PluginResult pluginResult = new PluginResult(Status.OK, attributionJsonData);
         pluginResult.setKeepCallback(true);
 
-        CallbackContext callbackResponseData = new CallbackContext(AdjustCordova.callbackId, AdjustCordova.cordovaWebView);
+        CallbackContext callbackResponseData = new CallbackContext(AdjustCordova.attributionCallbackId, AdjustCordova.cordovaWebView);
         callbackResponseData.sendPluginResult(pluginResult);
     }
 
