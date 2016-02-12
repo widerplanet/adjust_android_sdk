@@ -40,13 +40,6 @@
         <android.version>4.1.1.4</android.version>
         <android.version.platform>16</android.version.platform>
     </properties>
-    <repositories>
-        <repository>
-            <id>in-project</id>
-            <name>In Project Repo</name>
-            <url>file://${project.basedir}/adjust/libs</url>
-        </repository>
-    </repositories>
     <dependencies>
         <dependency>
             <artifactId>android</artifactId>
