@@ -54,11 +54,6 @@
             <groupId>com.google.android</groupId>
             <scope>provided</scope>
         </dependency>
-        <dependency>
-            <groupId>cordova</groupId>
-            <artifactId>cordova-lib</artifactId>
-            <version>4.0.2</version>
-        </dependency>
     </dependencies>
     <distributionManagement>
         <snapshotRepository>
