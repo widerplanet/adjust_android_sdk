@@ -19,8 +19,10 @@ public class AdjustContext extends FREContext {
     public static String AppWillOpenUrl = "appWillOpenUrl";
     public static String SetOfflineMode = "setOfflineMode";
     public static String SetReferrer = "setReferrer";
+    public static String GetGoogleAdId = "getGoogleAdId";
 
     // iOS methods
+    public static String GetIdfa = "getIdfa";
     public static String SetDeviceToken = "setDeviceToken";
 
     @Override
@@ -36,7 +38,9 @@ public class AdjustContext extends FREContext {
         functions.put(AdjustContext.AppWillOpenUrl, new AdjustFunction(AdjustContext.AppWillOpenUrl));
         functions.put(AdjustContext.SetOfflineMode, new AdjustFunction(AdjustContext.SetOfflineMode));
         functions.put(AdjustContext.SetReferrer, new AdjustFunction(AdjustContext.SetReferrer));
+        functions.put(AdjustContext.GetGoogleAdId, new AdjustFunction(AdjustContext.GetGoogleAdId));
 
+        functions.put(AdjustContext.GetIdfa, new AdjustFunction(AdjustContext.GetIdfa));
         functions.put(AdjustContext.SetDeviceToken, new AdjustFunction(AdjustContext.SetDeviceToken));
 
         return functions;
