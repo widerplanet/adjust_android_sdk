@@ -21,29 +21,45 @@ public class AdjustFunction implements FREFunction, OnAttributionChangedListener
         if (functionName == AdjustContext.OnCreate) {
             return OnCreate(freContext, freObjects);
         }
+
         if (functionName == AdjustContext.TrackEvent) {
             return TrackEvent(freContext, freObjects);
         }
+
         if (functionName == AdjustContext.SetEnabled) {
             return SetEnabled(freContext, freObjects);
         }
+
         if (functionName == AdjustContext.IsEnabled) {
             return IsEnabled(freContext, freObjects);
         }
+
         if (functionName == AdjustContext.OnResume) {
             return OnResume(freContext, freObjects);
         }
+
         if (functionName == AdjustContext.OnPause) {
             return OnPause(freContext, freObjects);
         }
+
         if (functionName == AdjustContext.AppWillOpenUrl) {
             return AppWillOpenUrl(freContext, freObjects);
         }
+
         if (functionName == AdjustContext.SetOfflineMode) {
             return SetOfflineMode(freContext, freObjects);
         }
+
         if (functionName == AdjustContext.SetReferrer) {
             return SetReferrer(freContext, freObjects);
+        }
+
+        if (functionName == AdjustContext.GetGoogleAdId) {
+            return GetGoogleAdId(freContext, freObjects);
+        }
+
+        if (functionName == AdjustContext.GetIdfa) {
+            return GetIdfa(freContext, freObjects);
         }
 
         return null;
@@ -109,8 +125,8 @@ public class AdjustFunction implements FREFunction, OnAttributionChangedListener
                 }
             }
 
-            if (freObjects[7] != null) {
-                String sdkPrefix = freObjects[7].getAsString();
+            if (freObjects[6] != null) {
+                String sdkPrefix = freObjects[6].getAsString();
 
                 if (sdkPrefix != null) {
                     adjustConfig.setSdkPrefix(sdkPrefix);
@@ -248,9 +264,22 @@ public class AdjustFunction implements FREFunction, OnAttributionChangedListener
         return null;
     }
 
+    private FREObject GetGoogleAdId(final FREContext freContext, FREObject[] freObjects) {
+        Adjust.getGoogleAdId(freContext.getActivity(), new OnDeviceIdsRead() {
+            @Override
+            public void onGoogleAdIdRead(String playAdId) {
+                freContext.dispatchStatusEventAsync("adjust_googleAdId", playAdId);
+            }
+        });
+
+        return null;
+    }
+
     private FREObject SetDeviceToken(FREContext freContext, FREObject[] freObjects) {
         return null;
     }
+
+    private FREObject GetIdfa(FREContext freContext, FREObject[] freObjects) { return null; }
 
     @Override
     public void onAttributionChanged(AdjustAttribution attribution) {
