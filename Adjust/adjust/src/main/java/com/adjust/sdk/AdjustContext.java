@@ -4,6 +4,7 @@ import com.adobe.fre.FREContext;
 import com.adobe.fre.FREFunction;
 
 import android.content.Intent;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -28,12 +29,10 @@ public class AdjustContext extends FREContext {
     public static String RemoveSessionPartnerParameter = "removeSessionPartnerParameter";
     public static String ResetSessionPartnerParameters = "resetSessionPartnerParameters";
     public static String SetDeviceToken = "setDeviceToken";
+    public static String SendFirstPackages = "sendFirstPackages";
 
     // iOS methods
     public static String GetIdfa = "getIdfa";
-
-    // iOS methods
-    public static String SetDeviceToken = "setDeviceToken";
 
     @Override
     public Map<String, FREFunction> getFunctions() {
@@ -57,8 +56,7 @@ public class AdjustContext extends FREContext {
         functions.put(AdjustContext.RemoveSessionPartnerParameter, new AdjustFunction(AdjustContext.RemoveSessionPartnerParameter));
         functions.put(AdjustContext.ResetSessionPartnerParameters, new AdjustFunction(AdjustContext.ResetSessionPartnerParameters));
         functions.put(AdjustContext.SetDeviceToken, new AdjustFunction(AdjustContext.SetDeviceToken));
-
-        functions.put(AdjustContext.SetDeviceToken, new AdjustFunction(AdjustContext.SetDeviceToken));
+        functions.put(AdjustContext.SendFirstPackages, new AdjustFunction(AdjustContext.SendFirstPackages));
 
         return functions;
     }
