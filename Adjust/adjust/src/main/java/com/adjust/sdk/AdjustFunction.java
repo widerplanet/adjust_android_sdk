@@ -268,7 +268,11 @@ public class AdjustFunction implements FREFunction, OnAttributionChangedListener
         Adjust.getGoogleAdId(freContext.getActivity(), new OnDeviceIdsRead() {
             @Override
             public void onGoogleAdIdRead(String playAdId) {
-                freContext.dispatchStatusEventAsync("adjust_googleAdId", playAdId);
+                if (playAdId != null) {
+                    freContext.dispatchStatusEventAsync("adjust_googleAdId", playAdId);
+                } else {
+                    freContext.dispatchStatusEventAsync("adjust_googleAdId", "");
+                }
             }
         });
 
