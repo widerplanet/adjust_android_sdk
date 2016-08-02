@@ -12,16 +12,11 @@ package com.adjust.sdk;
 import android.content.Context;
 import android.os.Handler;
 import android.os.HandlerThread;
-import android.os.Looper;
-import android.os.Message;
 import android.os.SystemClock;
+import android.util.*;
 
-import java.lang.ref.WeakReference;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
-import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 // persistent
@@ -42,7 +37,7 @@ public class PackageHandler extends HandlerThread implements IPackageHandler {
     public PackageHandler(IActivityHandler activityHandler,
                           Context context,
                           boolean startsSending) {
-        super(Constants.LOGTAG, MIN_PRIORITY);
+        super("PackageHandler", MIN_PRIORITY);
         setDaemon(true);
         start();
         this.internalHandler = new Handler(getLooper());
@@ -64,6 +59,7 @@ public class PackageHandler extends HandlerThread implements IPackageHandler {
         this.activityHandler = activityHandler;
         this.context = context;
         this.paused = !startsSending;
+
     }
 
     // add a package to the queue
@@ -99,14 +95,30 @@ public class PackageHandler extends HandlerThread implements IPackageHandler {
             }
         });
 
+        // redirect session responses to attribution handler to check for attribution information
         activityHandler.finishedTrackingActivity(responseData);
+
+        IResponseHandler responseHandler = AdjustFactory.getResponseHandler();
+        if (responseHandler == null) {
+            logger.error("Couldn't find responseHandler instance inside AdjustFactory");
+            return;
+        } else {
+            responseHandler.finishedTrackingActivity(responseData);
+        }
     }
 
     // close the package to retry in the future (after temporary failure)
     @Override
     public void closeFirstPackage(ResponseData responseData, ActivityPackage activityPackage) {
         responseData.willRetry = true;
-        activityHandler.finishedTrackingActivity(responseData);
+
+        IResponseHandler responseHandler = AdjustFactory.getResponseHandler();
+        if (responseHandler == null) {
+            logger.error("Couldn't find responseHandler instance inside AdjustFactory");
+            return;
+        } else {
+            responseHandler.finishedTrackingActivity(responseData);
+        }
 
         if (activityPackage != null) {
             int retries = activityPackage.increaseRetries();
@@ -185,7 +197,7 @@ public class PackageHandler extends HandlerThread implements IPackageHandler {
 
     private void readPackageQueue() {
         try {
-            packageQueue = Util.readObject(context, PACKAGE_QUEUE_FILENAME, PACKAGE_QUEUE_NAME, (Class<List<ActivityPackage>>)((Class)List.class));
+            packageQueue = Util.readObject(context, PACKAGE_QUEUE_FILENAME, PACKAGE_QUEUE_NAME, (Class<List<ActivityPackage>>) ((Class) List.class));
         } catch (Exception e) {
             logger.error("Failed to read %s file (%s)", PACKAGE_QUEUE_NAME, e.getMessage());
             packageQueue = null;

@@ -13,6 +13,7 @@ import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Looper;
 import android.os.Message;
+import android.util.*;
 
 import org.json.JSONException;
 
@@ -30,7 +31,7 @@ public class RequestHandler extends HandlerThread implements IRequestHandler {
     private ILogger logger;
 
     public RequestHandler(IPackageHandler packageHandler) {
-        super(Constants.LOGTAG, MIN_PRIORITY);
+        super("RequestHandler", MIN_PRIORITY);
         setDaemon(true);
         start();
 
@@ -44,6 +45,21 @@ public class RequestHandler extends HandlerThread implements IRequestHandler {
         this.packageHandler = packageHandler;
     }
 
+    //Why is `RequestHandler` starting posting a new runnable inside `sendPackage()`?
+    // We are already inside a background thread that was created inside `packageHandler#sendFirstPackage`
+
+    // `responseData.jsonResponse` that is coming from `RequestHandler.sendInternal()` will be
+    // null ONLY during a server failure or an error, right? That means that the final package
+    // in the queue will also have a `jsonResponse`
+
+    // From what I gathered, `PackageHandler#sendFirstPackage()` will keep chaining and sending packages
+    // as long as the list `packageQueue` is not empty. When it becomes empty, `PackageHandler#sendFirstInternal()`
+    // will short circuit and return the method.
+
+    // `ResponseHandler` can handle `activityHandler.finishedTrackingActivity` and its follow ups in
+    // `PackageHandler#sendNextPackage()`. What about the attributionHandler?
+
+    //
     @Override
     public void sendPackage(final ActivityPackage activityPackage, final int queueSize) {
         internalHandler.post(new Runnable() {

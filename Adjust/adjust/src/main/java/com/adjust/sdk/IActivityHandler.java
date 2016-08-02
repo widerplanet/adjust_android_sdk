@@ -24,8 +24,6 @@ public interface IActivityHandler {
 
     boolean updateAttribution(AdjustAttribution attribution);
 
-    void launchEventResponseTasks(EventResponseData eventResponseData);
-
     void launchSessionResponseTasks(SessionResponseData sessionResponseData);
 
     void launchAttributionResponseTasks(AttributionResponseData attributionResponseData);

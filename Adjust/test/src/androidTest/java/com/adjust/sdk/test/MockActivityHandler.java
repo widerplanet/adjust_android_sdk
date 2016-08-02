@@ -76,12 +76,6 @@ public class MockActivityHandler implements IActivityHandler {
     }
 
     @Override
-    public void launchEventResponseTasks(EventResponseData eventResponseData) {
-        testLogger.test(prefix + "launchEventResponseTasks, " + eventResponseData);
-        this.lastResponseData = eventResponseData;
-    }
-
-    @Override
     public void launchSessionResponseTasks(SessionResponseData sessionResponseData) {
         testLogger.test(prefix + "launchSessionResponseTasks, " + sessionResponseData);
         this.lastResponseData = sessionResponseData;

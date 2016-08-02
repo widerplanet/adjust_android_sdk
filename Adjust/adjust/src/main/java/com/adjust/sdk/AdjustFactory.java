@@ -15,6 +15,7 @@ public class AdjustFactory {
     private static ILogger logger = null;
     private static HttpsURLConnection httpsURLConnection = null;
     private static ISdkClickHandler sdkClickHandler = null;
+    private static IResponseHandler responseHandler = null;
 
     private static long timerInterval = -1;
     private static long timerStart = -1;
@@ -48,6 +49,14 @@ public class AdjustFactory {
         }
         requestHandler.init(packageHandler);
         return requestHandler;
+    }
+
+    public static IResponseHandler getResponseHandler() {
+        if(responseHandler == null) {
+            return null;
+        }
+
+        return responseHandler;
     }
 
     public static ILogger getLogger() {
@@ -150,6 +159,10 @@ public class AdjustFactory {
 
     public static void setRequestHandler(IRequestHandler requestHandler) {
         AdjustFactory.requestHandler = requestHandler;
+    }
+
+    public static void setResponseHandler(IResponseHandler responseHandler) {
+        AdjustFactory.responseHandler = responseHandler;
     }
 
     public static void setLogger(ILogger logger) {

@@ -88,7 +88,7 @@ public class ActivityHandler extends HandlerThread implements IActivityHandler {
     }
 
     private ActivityHandler(AdjustConfig adjustConfig) {
-        super(LOGTAG, MIN_PRIORITY);
+        super("ActivityHandler", MIN_PRIORITY);
         setDaemon(true);
         start();
 
@@ -154,6 +154,12 @@ public class ActivityHandler extends HandlerThread implements IActivityHandler {
     @Override
     public void init(AdjustConfig adjustConfig) {
         this.adjustConfig = adjustConfig;
+
+        //init relevant handlers
+        AdjustFactory.setResponseHandler(
+                new ResponseHandler(adjustConfig.context,
+                        adjustConfig.onEventTrackingSucceededListener,
+                        adjustConfig.onEventTrackingFailedListener));
     }
 
     public static ActivityHandler getInstance(AdjustConfig adjustConfig) {
@@ -246,13 +252,7 @@ public class ActivityHandler extends HandlerThread implements IActivityHandler {
     public void finishedTrackingActivity(ResponseData responseData) {
         // redirect session responses to attribution handler to check for attribution information
         if (responseData instanceof SessionResponseData) {
-            attributionHandler.checkSessionResponse((SessionResponseData)responseData);
-            return;
-        }
-        // check if it's an event response
-        if (responseData instanceof EventResponseData) {
-            launchEventResponseTasks((EventResponseData)responseData);
-            return;
+            attributionHandler.checkSessionResponse((SessionResponseData) responseData);
         }
     }
 
@@ -286,8 +286,7 @@ public class ActivityHandler extends HandlerThread implements IActivityHandler {
     }
 
     private void updateStatus(boolean pausingState, String pausingMessage,
-                              String remainsPausedMessage, String unPausingMessage)
-    {
+                              String remainsPausedMessage, String unPausingMessage) {
         // it is changing from an active state to a pause state
         if (pausingState) {
             logger.info(pausingMessage);
@@ -298,7 +297,7 @@ public class ActivityHandler extends HandlerThread implements IActivityHandler {
         // it is remaining in a pause state
         if (paused()) {
             logger.info(remainsPausedMessage);
-        // it is changing from a pause state to an active state
+            // it is changing from a pause state to an active state
         } else {
             logger.info(unPausingMessage);
             updateHandlersStatusAndSend();
@@ -306,8 +305,7 @@ public class ActivityHandler extends HandlerThread implements IActivityHandler {
     }
 
     private boolean hasChangedState(boolean previousState, boolean newState,
-                                    String trueMessage, String falseMessage)
-    {
+                                    String trueMessage, String falseMessage) {
         if (previousState != newState) {
             return true;
         }
@@ -401,16 +399,6 @@ public class ActivityHandler extends HandlerThread implements IActivityHandler {
     }
 
     @Override
-    public void launchEventResponseTasks(final EventResponseData eventResponseData) {
-        internalHandler.post(new Runnable() {
-            @Override
-            public void run() {
-                launchEventResponseTasksInternal(eventResponseData);
-            }
-        });
-    }
-
-    @Override
     public void launchSessionResponseTasks(final SessionResponseData sessionResponseData) {
         internalHandler.post(new Runnable() {
             @Override
@@ -485,8 +473,7 @@ public class ActivityHandler extends HandlerThread implements IActivityHandler {
             logger.warn("Unable to get Google Play Services Advertising ID at start time");
             if (deviceInfo.macSha1 == null &&
                     deviceInfo.macShortMd5 == null &&
-                    deviceInfo.androidId == null)
-            {
+                    deviceInfo.androidId == null) {
                 logger.error("Unable to get any device id's. Please check if Proguard is correctly set with Adjust SDK");
             }
         } else {
@@ -577,7 +564,9 @@ public class ActivityHandler extends HandlerThread implements IActivityHandler {
     }
 
     private void checkAttributionState() {
-        if (!checkActivityState(activityState)) { return; }
+        if (!checkActivityState(activityState)) {
+            return;
+        }
 
         // if it's a new session
         if (activityState.subsessionCount <= 1) {
@@ -629,39 +618,6 @@ public class ActivityHandler extends HandlerThread implements IActivityHandler {
         }
 
         writeActivityState();
-    }
-
-    private void launchEventResponseTasksInternal(final EventResponseData eventResponseData) {
-        Handler handler = new Handler(adjustConfig.context.getMainLooper());
-
-        // success callback
-        if (eventResponseData.success && adjustConfig.onEventTrackingSucceededListener != null) {
-            logger.debug("Launching success event tracking listener");
-            // add it to the handler queue
-            Runnable runnable = new Runnable() {
-                @Override
-                public void run() {
-                    adjustConfig.onEventTrackingSucceededListener.onFinishedEventTrackingSucceeded(eventResponseData.getSuccessResponseData());
-                }
-            };
-            handler.post(runnable);
-
-            return;
-        }
-        // failure callback
-        if (!eventResponseData.success && adjustConfig.onEventTrackingFailedListener != null) {
-            logger.debug("Launching failed event tracking listener");
-            // add it to the handler queue
-            Runnable runnable = new Runnable() {
-                @Override
-                public void run() {
-                    adjustConfig.onEventTrackingFailedListener.onFinishedEventTrackingFailed(eventResponseData.getFailureResponseData());
-                }
-            };
-            handler.post(runnable);
-
-            return;
-        }
     }
 
     private void launchSessionResponseTasksInternal(SessionResponseData sessionResponseData) {
@@ -801,7 +757,7 @@ public class ActivityHandler extends HandlerThread implements IActivityHandler {
     }
 
     private void sendReferrerInternal(String referrer, long clickTime) {
-        if (referrer == null || referrer.length() == 0 ) {
+        if (referrer == null || referrer.length() == 0) {
             return;
         }
         PackageBuilder clickPackageBuilder = queryStringClickPackageBuilder(referrer);
@@ -941,7 +897,9 @@ public class ActivityHandler extends HandlerThread implements IActivityHandler {
     }
 
     private boolean updateActivityState(long now) {
-        if (!checkActivityState(activityState)) { return false; }
+        if (!checkActivityState(activityState)) {
+            return false;
+        }
 
         long lastInterval = now - activityState.lastActivity;
         // ignore late updates
