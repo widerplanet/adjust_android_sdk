@@ -7,24 +7,28 @@ import android.os.Bundle;
 import android.util.Log;
 
 public class AdjustActivity extends Activity {
-    public static String extraPrefix = "com.adjust.sdk.AdjustActivity";
+  public static String extraPrefix = "com.adjust.sdk.AdjustActivity";
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+  @Override
+  public void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
 
-        Intent intent = getIntent();
-        String action = intent.getAction();
-        Uri data = intent.getData();
-    }
+    Log.d("ADJUST", "Calling onCreate()");
 
-    @Override
-    public void onStart() {
-        super.onStart();
-    }
+    Intent intent = getIntent();
+    String action = intent.getAction();
+    Uri data = intent.getData();
+    Log.d("ADJUST", "getIntent().action = " + action);
+    Log.d("ADJUST", "getIntent().data = " + data);
+  }
 
-    @Override
-    public void onNewIntent(Intent intent) {
-        this.setIntent(intent);
-    }
+  @Override
+  public void onStart() {
+    super.onStart();
+  }
+
+  @Override
+  public void onNewIntent(Intent intent) {
+    this.setIntent(intent);
+  }
 }
