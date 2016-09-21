@@ -17,7 +17,6 @@ public class AdjustFunction implements FREFunction,
        OnSessionTrackingFailedListener,
        OnDeeplinkResponseListener {
          private String functionName;
-         private FREContext freContext;
          private Boolean shouldLaunchDeeplink;
 
          public AdjustFunction(String functionName) {
@@ -26,6 +25,8 @@ public class AdjustFunction implements FREFunction,
 
          @Override
          public FREObject call(FREContext freContext, FREObject[] freObjects) {
+           AdjustExtension.context = (AdjustContext) freContext;
+
            if (functionName == AdjustContext.OnCreate) {
              return OnCreate(freContext, freObjects);
            }
@@ -103,8 +104,6 @@ public class AdjustFunction implements FREFunction,
 
          private FREObject OnCreate(FREContext freContext, FREObject[] freObjects) {
            try {
-             this.freContext = freContext;
-
              String appToken = null;
              String environment = null;
 
@@ -235,6 +234,7 @@ public class AdjustFunction implements FREFunction,
              String eventToken = null;
              String currency = null;
              double revenue = 0;
+             String orderId = null;
 
              if (freObjects[0] != null) {
                eventToken = freObjects[0].getAsString();
@@ -264,6 +264,11 @@ public class AdjustFunction implements FREFunction,
                  adjustEvent.addCallbackParameter(((FREArray) freObjects[4]).getObjectAt(i).getAsString(),
                      ((FREArray) freObjects[4]).getObjectAt(i + 1).getAsString());
                }
+             }
+
+             if (freObjects[5] != null) {
+               orderId = freObjects[5].getAsString();
+               adjustEvent.setOrderId(orderId);
              }
 
              Adjust.trackEvent(adjustEvent);
@@ -379,7 +384,7 @@ public class AdjustFunction implements FREFunction,
              String key = freObjects[0].getAsString();
              String value = freObjects[1].getAsString();
 
-           Log.d(AdjustExtension.LogTag, ">>>>>ADD_SESSION_CALLBACK_PARAMETER<<<<<<");
+             Log.d(AdjustExtension.LogTag, ">>>>>ADD_SESSION_CALLBACK_PARAMETER<<<<<<");
              Adjust.addSessionCallbackParameter(key, value);
            } catch (Exception e) {
              Log.e(AdjustExtension.LogTag, e.getMessage());
@@ -392,7 +397,7 @@ public class AdjustFunction implements FREFunction,
            try {
              String key = freObjects[0].getAsString();
 
-           Log.d(AdjustExtension.LogTag, ">>>>>REMOVE_SESSION_CALLBACK_PARAMETER<<<<<<");
+             Log.d(AdjustExtension.LogTag, ">>>>>REMOVE_SESSION_CALLBACK_PARAMETER<<<<<<");
              Adjust.removeSessionCallbackParameter(key);
            } catch (Exception e) {
              Log.e(AdjustExtension.LogTag, e.getMessage());
@@ -403,7 +408,7 @@ public class AdjustFunction implements FREFunction,
 
          private FREObject ResetSessionCallbackParameters(FREContext freContext, FREObject[] freObjects) {
            try {
-           Log.d(AdjustExtension.LogTag, ">>>>>RESET_SESSION_CALLBACK_PARAMETER<<<<<<");
+             Log.d(AdjustExtension.LogTag, ">>>>>RESET_SESSION_CALLBACK_PARAMETER<<<<<<");
              Adjust.resetSessionCallbackParameters();
            } catch (Exception e) {
              Log.e(AdjustExtension.LogTag, e.getMessage());
@@ -430,7 +435,7 @@ public class AdjustFunction implements FREFunction,
            try {
              String key = freObjects[0].getAsString();
 
-           Log.d(AdjustExtension.LogTag, ">>>>>REMOVE_SESSION_PARTNER_PARAMETER<<<<<<");
+             Log.d(AdjustExtension.LogTag, ">>>>>REMOVE_SESSION_PARTNER_PARAMETER<<<<<<");
              Adjust.removeSessionPartnerParameter(key);
            } catch (Exception e) {
              Log.e(AdjustExtension.LogTag, e.getMessage());
@@ -441,7 +446,7 @@ public class AdjustFunction implements FREFunction,
 
          private FREObject ResetSessionPartnerParameters(FREContext freContext, FREObject[] freObjects) {
            try {
-           Log.d(AdjustExtension.LogTag, ">>>>>RESET_SESSION_PARTNER_PARAMETER<<<<<<");
+             Log.d(AdjustExtension.LogTag, ">>>>>RESET_SESSION_PARTNER_PARAMETER<<<<<<");
              Adjust.resetSessionPartnerParameters();
            } catch (Exception e) {
              Log.e(AdjustExtension.LogTag, e.getMessage());
@@ -472,7 +477,7 @@ public class AdjustFunction implements FREFunction,
              + "adgroup=" + attribution.adgroup + ","
              + "clickLabel=" + attribution.clickLabel;
 
-           this.freContext.dispatchStatusEventAsync("adjust_attributionData", response);
+           AdjustExtension.context.dispatchStatusEventAsync("adjust_attributionData", response);
          }
 
          @Override
@@ -491,7 +496,7 @@ public class AdjustFunction implements FREFunction,
              response.append("jsonResponse=" + event.jsonResponse.toString());
            }
 
-           this.freContext.dispatchStatusEventAsync("adjust_eventTrackingSucceeded", response.toString());
+           AdjustExtension.context.dispatchStatusEventAsync("adjust_eventTrackingSucceeded", response.toString());
          }
 
          @Override
@@ -511,7 +516,7 @@ public class AdjustFunction implements FREFunction,
              response.append("jsonResponse=" + event.jsonResponse.toString());
            }
 
-           this.freContext.dispatchStatusEventAsync("adjust_eventTrackingFailed", response.toString());
+           AdjustExtension.context.dispatchStatusEventAsync("adjust_eventTrackingFailed", response.toString());
          }
 
          @Override
@@ -529,7 +534,7 @@ public class AdjustFunction implements FREFunction,
              response.append("jsonResponse=" + event.jsonResponse.toString());
            }
 
-           this.freContext.dispatchStatusEventAsync("adjust_sessionTrackingSucceeded", response.toString());
+           AdjustExtension.context.dispatchStatusEventAsync("adjust_sessionTrackingSucceeded", response.toString());
          }
 
          @Override
@@ -548,14 +553,14 @@ public class AdjustFunction implements FREFunction,
              response.append("jsonResponse=" + event.jsonResponse.toString());
            }
 
-           this.freContext.dispatchStatusEventAsync("adjust_sessionTrackingFailed", response.toString());
+           AdjustExtension.context.dispatchStatusEventAsync("adjust_sessionTrackingFailed", response.toString());
          }
 
          @Override
          public boolean launchReceivedDeeplink(Uri deeplink) {
            String response = deeplink.toString();
 
-           this.freContext.dispatchStatusEventAsync("adjust_deferredDeeplink", response);
+           AdjustExtension.context.dispatchStatusEventAsync("adjust_deferredDeeplink", response);
            return shouldLaunchDeeplink;
          }
 }
