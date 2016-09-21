@@ -3,6 +3,8 @@ package com.adjust.sdk;
 import com.adobe.fre.FREContext;
 import com.adobe.fre.FREFunction;
 
+import android.content.Intent;
+
 import java.util.HashMap;
 import java.util.Map;
 
