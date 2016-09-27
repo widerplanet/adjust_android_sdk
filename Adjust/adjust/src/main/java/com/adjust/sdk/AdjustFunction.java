@@ -120,12 +120,12 @@ public class AdjustFunction implements FREFunction,
                        logLevel = freObjects[2].getAsString();
                    }
 
-                   boolean allowSupressLogLevel = false;
-                   if(logLevel != null && logLevel.equals("supress")) {
-                       allowSupressLogLevel = true;
+                   boolean allowSuppressLogLevel = false;
+                   if(logLevel != null && logLevel.equals("suppress")) {
+                       allowSuppressLogLevel = true;
                    }
 
-                   AdjustConfig adjustConfig = new AdjustConfig(freContext.getActivity(), appToken, environment, allowSupressLogLevel);
+                   AdjustConfig adjustConfig = new AdjustConfig(freContext.getActivity(), appToken, environment, allowSuppressLogLevel);
 
                    if (logLevel != null) {
                        if (logLevel.equals("verbose")) {
@@ -142,8 +142,8 @@ public class AdjustFunction implements FREFunction,
                            adjustConfig.setLogLevel(LogLevel.ASSERT);
                        } else if (logLevel.equals("assert")) {
                            adjustConfig.setLogLevel(LogLevel.ASSERT);
-                       } else if (logLevel.equals("supress")) {
-                           adjustConfig.setLogLevel(LogLevel.SUPRESS);
+                       } else if (logLevel.equals("suppress")) {
+                           adjustConfig.setLogLevel(LogLevel.SUPPRESS);
                        } else {
                            adjustConfig.setLogLevel(LogLevel.INFO);
                        }
