@@ -144,17 +144,17 @@ public class AdjustConfig {
     private void setLogLevel(LogLevel logLevel, String environment) {
         LogLevel newLogLevel = null;
         if (ENVIRONMENT_PRODUCTION.equals(environment)) {
-            // production && allows supress -> Supress
+            // production && allows suppress -> Suppress
             if (allowSuppressLogLevel) {
-                newLogLevel = LogLevel.SUPRESS;
+                newLogLevel = LogLevel.SUPPRESS;
             } else {
-                // production && not allow supress -> Assert
+                // production && not allow suppress -> Assert
                 newLogLevel = LogLevel.ASSERT;
             }
         } else {
-            // not allow supress && try supress -> Assert
+            // not allow suppress && try suppress -> Assert
             if (!allowSuppressLogLevel &&
-                    logLevel == LogLevel.SUPRESS) {
+                    logLevel == LogLevel.SUPPRESS) {
                 newLogLevel = LogLevel.ASSERT;
             } else {
                 newLogLevel = logLevel;
