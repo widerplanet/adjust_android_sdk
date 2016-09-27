@@ -98,6 +98,10 @@ public class AdjustFunction implements FREFunction,
         if (functionName == AdjustContext.SetDeviceToken) {
             return SetDeviceToken(freContext, freObjects);
         }
+        
+        if (functionName == AdjustContext.SendFirstPackages) {
+            return SendFirstPackages(freContext, freObjects);
+        }
 
         return null;
     }
@@ -228,6 +232,16 @@ public class AdjustFunction implements FREFunction,
                 adjustConfig.setProcessName(processName);
             }
 
+            if (freObjects[14] != null) {
+                double delayStart = freObjects[14].getAsDouble();
+                adjustConfig.setDelayStart(delayStart);
+            }
+
+            if (freObjects[15] != null) {
+                String userAgent = freObjects[15].getAsString();
+                adjustConfig.setUserAgent(userAgent);
+            }
+
             Adjust.onCreate(adjustConfig);
         } catch (Exception e) {
             Log.e(AdjustExtension.LogTag, e.getMessage());
@@ -334,6 +348,16 @@ public class AdjustFunction implements FREFunction,
             Uri uri = Uri.parse(url);
 
             Adjust.appWillOpenUrl(uri);
+        } catch (Exception e) {
+            Log.e(AdjustExtension.LogTag, e.getMessage());
+        }
+
+        return null;
+    }
+
+    private FREObject SendFirstPackages(FREContext freContext, FREObject[] freObjects) {
+        try {
+            Adjust.sendFirstPackages();
         } catch (Exception e) {
             Log.e(AdjustExtension.LogTag, e.getMessage());
         }
