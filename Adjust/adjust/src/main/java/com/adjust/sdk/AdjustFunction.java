@@ -223,6 +223,11 @@ public class AdjustFunction implements FREFunction,
                 shouldLaunchDeeplink = freObjects[12].getAsBool();
             }
 
+            if (freObjects[13] != null) {
+                String processName = freObjects[13].getAsString();
+                adjustConfig.setProcessName(processName);
+            }
+
             Adjust.onCreate(adjustConfig);
         } catch (Exception e) {
             Log.e(AdjustExtension.LogTag, e.getMessage());
@@ -383,14 +388,6 @@ public class AdjustFunction implements FREFunction,
                 }
             }
         });
-
-        return null;
-    }
-
-    private FREObject SetDeviceToken(FREContext freContext, FREObject[] freObjects) {
-        String pushToken = freObjects[0].getAsString();
-
-        Adjust.setPushToken(pushToken);
 
         return null;
     }
