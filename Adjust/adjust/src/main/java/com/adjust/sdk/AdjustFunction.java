@@ -232,7 +232,6 @@ public class AdjustFunction implements FREFunction,
                 adjustConfig.setProcessName(processName);
             }
 
-<<<<<<< HEAD
             if (freObjects[14] != null) {
                 double delayStart = freObjects[14].getAsDouble();
                 adjustConfig.setDelayStart(delayStart);
@@ -243,8 +242,6 @@ public class AdjustFunction implements FREFunction,
                 adjustConfig.setUserAgent(userAgent);
             }
 
-=======
->>>>>>> 89c4555dfc2910607f82f7a42296ae600c82f135
             Adjust.onCreate(adjustConfig);
         } catch (Exception e) {
             Log.e(AdjustExtension.LogTag, e.getMessage());
