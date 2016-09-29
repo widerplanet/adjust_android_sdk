@@ -242,6 +242,11 @@ public class AdjustFunction implements FREFunction,
                 adjustConfig.setUserAgent(userAgent);
             }
 
+            if (freObjects[16] != null) {
+                boolean sendInBackground = freObjects[16].getAsBool();
+                adjustConfig.setSendInBackground(sendInBackground);
+            }
+
             Adjust.onCreate(adjustConfig);
         } catch (Exception e) {
             Log.e(AdjustExtension.LogTag, e.getMessage());
