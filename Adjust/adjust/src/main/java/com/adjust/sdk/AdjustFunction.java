@@ -287,7 +287,7 @@ public class AdjustFunction implements FREFunction,
 
             if (freObjects[4] != null) {
                 for (int i = 0; i < ((FREArray) freObjects[4]).getLength(); i += 2) {
-                    adjustEvent.addCallbackParameter(((FREArray) freObjects[4]).getObjectAt(i).getAsString(),
+                    adjustEvent.addPartnerParameter(((FREArray) freObjects[4]).getObjectAt(i).getAsString(),
                             ((FREArray) freObjects[4]).getObjectAt(i + 1).getAsString());
                 }
             }
@@ -499,13 +499,13 @@ public class AdjustFunction implements FREFunction,
             return;
         }
 
-        String response = "trackerToken=" + attribution.trackerToken + ","
-            + "trackerName=" + attribution.trackerName + ","
-            + "campaign=" + attribution.campaign + ","
-            + "network=" + attribution.network + ","
-            + "creative=" + attribution.creative + ","
-            + "adgroup=" + attribution.adgroup + ","
-            + "clickLabel=" + attribution.clickLabel;
+        String response = "trackerToken==" + attribution.trackerToken + "__"
+            + "trackerName==" + attribution.trackerName + "__"
+            + "campaign==" + attribution.campaign + "__"
+            + "network==" + attribution.network + "__"
+            + "creative==" + attribution.creative + "__"
+            + "adgroup==" + attribution.adgroup + "__"
+            + "clickLabel==" + attribution.clickLabel;
 
         AdjustExtension.context.dispatchStatusEventAsync("adjust_attributionData", response);
     }
@@ -517,13 +517,13 @@ public class AdjustFunction implements FREFunction,
         }
 
         StringBuilder response = new StringBuilder();
-        response.append("message=" + event.message + ","
-                + "timestamp=" + event.timestamp + ","
-                + "adid=" + event.adid + ","
-                + "eventToken=" + event.eventToken + ",");
+        response.append("message==" + event.message + "__"
+                + "timeStamp==" + event.timestamp + "__"
+                + "adid==" + event.adid + "__"
+                + "eventToken==" + event.eventToken + "__");
 
         if (event.jsonResponse != null) {
-            response.append("jsonResponse=" + event.jsonResponse.toString());
+            response.append("jsonResponse==" + event.jsonResponse.toString());
         }
 
         AdjustExtension.context.dispatchStatusEventAsync("adjust_eventTrackingSucceeded", response.toString());
@@ -536,14 +536,14 @@ public class AdjustFunction implements FREFunction,
         }
 
         StringBuilder response = new StringBuilder();
-        response.append("message=" + event.message + ","
-                + "timestamp=" + event.timestamp + ","
-                + "adid=" + event.adid + ","
-                + "eventToken=" + event.eventToken + ","
-                + "willRetry=" + event.willRetry + ",");
+        response.append("message==" + event.message + "__"
+                + "timeStamp==" + event.timestamp + "__"
+                + "adid==" + event.adid + "__"
+                + "eventToken==" + event.eventToken + "__"
+                + "willRetry==" + event.willRetry + "__");
 
         if (event.jsonResponse != null) {
-            response.append("jsonResponse=" + event.jsonResponse.toString());
+            response.append("jsonResponse==" + event.jsonResponse.toString());
         }
 
         AdjustExtension.context.dispatchStatusEventAsync("adjust_eventTrackingFailed", response.toString());
@@ -556,12 +556,12 @@ public class AdjustFunction implements FREFunction,
         }
 
         StringBuilder response = new StringBuilder();
-        response.append("message=" + event.message + ","
-                + "timestamp=" + event.timestamp + ","
-                + "adid=" + event.adid + ",");
+        response.append("message==" + event.message + "__"
+                + "timeStamp==" + event.timestamp + "__"
+                + "adid==" + event.adid + "__");
 
         if (event.jsonResponse != null) {
-            response.append("jsonResponse=" + event.jsonResponse.toString());
+            response.append("jsonResponse==" + event.jsonResponse.toString());
         }
 
         AdjustExtension.context.dispatchStatusEventAsync("adjust_sessionTrackingSucceeded", response.toString());
@@ -574,13 +574,13 @@ public class AdjustFunction implements FREFunction,
         }
 
         StringBuilder response = new StringBuilder();
-        response.append("message=" + event.message + ","
-                + "timestamp=" + event.timestamp + ","
-                + "adid=" + event.adid + ","
-                + "willRetry=" + event.willRetry + ",");
+        response.append("message==" + event.message + "__"
+                + "timeStamp==" + event.timestamp + "__"
+                + "adid==" + event.adid + "__"
+                + "willRetry==" + event.willRetry + "__");
 
         if (event.jsonResponse != null) {
-            response.append("jsonResponse=" + event.jsonResponse.toString());
+            response.append("jsonResponse==" + event.jsonResponse.toString());
         }
 
         AdjustExtension.context.dispatchStatusEventAsync("adjust_sessionTrackingFailed", response.toString());
