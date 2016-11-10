@@ -1490,7 +1490,12 @@ public class ActivityHandler implements IActivityHandler {
             return;
         }
 
-        if (token.equals(activityState.pushToken)) {
+        logger.verbose("activityState == null %b", activityState == null);
+
+        boolean isTokenEqual = token.equals(activityState.pushToken);
+
+        logger.verbose("isTokenEqual %b", isTokenEqual);
+        if (isTokenEqual           ) {
             return;
         }
 
