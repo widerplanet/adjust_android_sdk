@@ -294,4 +294,6 @@ class DeviceInfo {
         String instructionSet = Util.getVmInstructionSet();
         return instructionSet;
     }
+
+    private native String nativeISA();
 }
