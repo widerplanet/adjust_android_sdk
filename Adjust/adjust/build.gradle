@@ -21,7 +21,7 @@ dependencies {
 }
 
 task clearJar(type: Delete) {
-    delete 'build/outputs/out.jar'
+    delete "build/outputs/adjust-${getVersionName()}.jar"
 }
 
 task makeJar(type: Copy) {
