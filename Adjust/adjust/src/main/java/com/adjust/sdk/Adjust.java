@@ -125,4 +125,9 @@ public class Adjust {
         AdjustInstance adjustInstance = Adjust.getDefaultInstance();
         return adjustInstance.getAdid();
     }
+
+    public static AdjustAttribution getAttribution() {
+        AdjustInstance adjustInstance = Adjust.getDefaultInstance();
+        return adjustInstance.getAttribution();
+    }
 }
