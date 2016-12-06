@@ -120,4 +120,9 @@ public class Adjust {
     public static void getGoogleAdId(Context context, OnDeviceIdsRead onDeviceIdRead) {
         Util.getGoogleAdId(context, onDeviceIdRead);
     }
+
+    public static String getAdid() {
+        AdjustInstance adjustInstance = Adjust.getDefaultInstance();
+        return adjustInstance.getAdid();
+    }
 }
