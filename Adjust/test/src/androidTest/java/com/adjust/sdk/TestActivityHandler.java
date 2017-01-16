@@ -2708,7 +2708,7 @@ public class TestActivityHandler {
         assertUtil.test("MockLogger setLogLevel: " + LogLevel.ERROR);
         assertUtil.test("MockLogger setLogLevel: " + LogLevel.ASSERT);
 
-        config.setLogLevel(LogLevel.SUPPRESS);
+        config.setLogLevel(LogLevel.SUPRESS);
 
         // chooses Assert because config object was not configured to allow suppress
         assertUtil.test("MockLogger setLogLevel: " + LogLevel.ASSERT);
@@ -2716,24 +2716,24 @@ public class TestActivityHandler {
         // init log level with assert because it was not configured to allow suppress
         config = getConfig(LogLevel.ASSERT, "production", "123456789012", false, context);
 
-        config.setLogLevel(LogLevel.SUPPRESS);
+        config.setLogLevel(LogLevel.SUPRESS);
         // chooses Assert because config object was not configured to allow suppress
         assertUtil.test("MockLogger setLogLevel: " + LogLevel.ASSERT);
 
         // init with info because it's sandbox
         config = getConfig(LogLevel.INFO, "sandbox", "123456789012", true, context);
 
-        config.setLogLevel(LogLevel.SUPPRESS);
+        config.setLogLevel(LogLevel.SUPRESS);
         // chooses Suppress because config object was configured to allow suppress
-        assertUtil.test("MockLogger setLogLevel: " + LogLevel.SUPPRESS);
+        assertUtil.test("MockLogger setLogLevel: " + LogLevel.SUPRESS);
 
         // init with info because it's sandbox
-        config = getConfig(LogLevel.SUPPRESS, "production", "123456789012", true, context);
+        config = getConfig(LogLevel.SUPRESS, "production", "123456789012", true, context);
 
         config.setLogLevel(LogLevel.ASSERT);
 
         // chooses Suppress because config object was configured to allow suppress
-        assertUtil.test("MockLogger setLogLevel: " + LogLevel.SUPPRESS);
+        assertUtil.test("MockLogger setLogLevel: " + LogLevel.SUPRESS);
     }
 
     @Test
@@ -2802,13 +2802,13 @@ public class TestActivityHandler {
     private AdjustConfig getConfig(LogLevel initLogLevel,
                                    String environment,
                                    String appToken,
-                                   boolean allowSuppressLogLevel,
+                                   boolean allowSupressLogLevel,
                                    Context context)
     {
         AdjustConfig adjustConfig = null;
 
-        if (allowSuppressLogLevel) {
-            adjustConfig = new AdjustConfig(context, appToken, environment, allowSuppressLogLevel);
+        if (allowSupressLogLevel) {
+            adjustConfig = new AdjustConfig(context, appToken, environment, allowSupressLogLevel);
         } else {
             adjustConfig = new AdjustConfig(context, appToken, environment);
         }
