@@ -152,9 +152,9 @@ public class AdjustConfig {
                 newLogLevel = LogLevel.ASSERT;
             }
         } else {
-            // not allow suppress && try supress -> Assert
+            // not allow supress && try supress -> Assert
             if (!allowSuppressLogLevel &&
-                    logLevel == LogLevel.SUPPRESS) {
+                    logLevel == LogLevel.SUPRESS) {
                 newLogLevel = LogLevel.ASSERT;
             } else {
                 newLogLevel = logLevel;

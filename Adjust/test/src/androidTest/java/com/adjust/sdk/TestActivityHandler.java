@@ -2724,7 +2724,7 @@ public class TestActivityHandler {
         config = getConfig(LogLevel.INFO, "sandbox", "123456789012", true, context);
 
         config.setLogLevel(LogLevel.SUPRESS);
-        // chooses Suppress because config object was configured to allow suppress
+        // chooses Supress because config object was configured to allow suppress
         assertUtil.test("MockLogger setLogLevel: " + LogLevel.SUPRESS);
 
         // init with info because it's sandbox
@@ -2732,7 +2732,7 @@ public class TestActivityHandler {
 
         config.setLogLevel(LogLevel.ASSERT);
 
-        // chooses Suppress because config object was configured to allow suppress
+        // chooses Supress because config object was configured to allow suppress
         assertUtil.test("MockLogger setLogLevel: " + LogLevel.SUPRESS);
     }
 
