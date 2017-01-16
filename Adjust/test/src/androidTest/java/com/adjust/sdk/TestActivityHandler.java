@@ -2826,7 +2826,7 @@ public class TestActivityHandler {
         assertUtil.test("MockLogger setLogLevel: " + LogLevel.ERROR + ", isProductionEnvironment: false");
         assertUtil.test("MockLogger setLogLevel: " + LogLevel.ASSERT + ", isProductionEnvironment: false");
 
-        config.setLogLevel(LogLevel.SUPPRESS);
+        config.setLogLevel(LogLevel.SUPRESS);
 
         // chooses Assert because config object was not configured to allow suppress
         //assertUtil.test("MockLogger setLogLevel: " + LogLevel.ASSERT);
@@ -2922,13 +2922,13 @@ public class TestActivityHandler {
 
     private AdjustConfig getConfig(String environment,
                                    String appToken,
-                                   boolean allowSuppressLogLevel,
+                                   boolean allowSupressLogLevel,
                                    Context context)
     {
         AdjustConfig adjustConfig = null;
 
-        if (allowSuppressLogLevel) {
-            adjustConfig = new AdjustConfig(context, appToken, environment, allowSuppressLogLevel);
+        if (allowSupressLogLevel) {
+            adjustConfig = new AdjustConfig(context, appToken, environment, allowSupressLogLevel);
         } else {
             adjustConfig = new AdjustConfig(context, appToken, environment);
         }
