@@ -780,7 +780,6 @@ public class ActivityHandler implements IActivityHandler {
             activityState.resetSessionAttributes(now);
             activityState.enabled = internalState.isEnabled();
             activityState.updatePackages = internalState.isToUpdatePackages();
-            activityState.pushToken = adjustConfig.pushToken;
             writeActivityStateI();
             return;
         }
