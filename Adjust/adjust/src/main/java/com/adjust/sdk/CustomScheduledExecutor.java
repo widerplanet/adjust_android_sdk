@@ -77,14 +77,21 @@ public final class CustomScheduledExecutor {
 
     private class RunnableWrapper implements Runnable {
         private Runnable runnable;
+//        private long created;
+//        private int threadNumber;
 
         public RunnableWrapper(Runnable runnable) {
             this.runnable = runnable;
+//            created = System.currentTimeMillis();
+//            threadNumber = threadCounter.getAndIncrement();
+//            AdjustFactory.getLogger().verbose("RunnableWrapper %d from %s created at %d", threadNumber, source, created);
         }
 
         @Override
         public void run() {
             try {
+//                long before = System.currentTimeMillis();
+//                AdjustFactory.getLogger().verbose("RunnableWrapper %d from %s source, before running at %d", threadNumber, source, before);
                 runnable.run();
 //                long after = System.currentTimeMillis();
 //                AdjustFactory.getLogger().verbose("RunnableWrapper %d from %s source, after running at %d", threadNumber, source, after);
