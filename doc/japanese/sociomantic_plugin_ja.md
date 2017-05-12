@@ -1,22 +1,20 @@
-## Sociomantic plugin
+## Sociomanticプラグイン
 
-Add the dependency of the adjust sdk with the Sociomantic plugin:
+Sociomanticプラグインを連携させるには、adjust SDKとSociomanticプラグインのDependencyを追加してください。
 
 ```
-compile 'com.adjust.sdk:adjust-android-sociomantic:4.11.4'
+compile 'com.adjust.sdk:adjust-android-sociomantic:4.11.0'
 ```
 
-Or integrate adjust with Sociomantic events by following these steps:
+もしくは、次の手順に従ってSociomanticをAdjustに連携させてください。
 
-1. Locate the `plugin/Sociomantic` folder inside the downloaded archive from our [releases page](https://github.com/adjust/android_sdk/releases).
+1. `plugin/Sociomantic`フォルダを[releases page](https://github.com/adjust/android_sdk/releases)からダウンロードアーカイブに置いてください。
 
-2. Open the `adjust` module in Android Studio and locate the
-   `plugin` package folder in `adjust/java/com/adjust/sdk`.
+2. Android Studio上で`adjust`モジュールを開き、`plugin`パッケージフォルダを`adjust/java/com/adjust/sdk`に置いてください。
 
-3. Drag the `AdjustSociomantic.java` file from the
-   downloaded `plugin/Sociomantic/com/adjust/sdk/plugin` folder into the `plugin` folder in the `adjust` project.
+3. ダウンロードした`plugin/Sociomantic/com/adjust/sdk/plugin`フォルダから`AdjustSociomantic.java`ファイルをドラッグし、`adjust`プロジェクトの`plugin`フォルダに入れてください。
 
-4. You know have access to the Sociomantic events methods as well as constants that you should use for property names of your dictionaries:
+4. これで、ディクショナリのプロパティ名としてお使いの定数と同様に、Sociomanticのイベントメソッドを使えるようになります。
 
     ```java
     final static String SCMCategory;
@@ -44,7 +42,7 @@ Or integrate adjust with Sociomantic events by following these steps:
     final static String SCMTransaction;
     ```
 
-5. Before sending any Sociomantic you should set a partner id as shown below:
+5. Sociomanticの送信の前に、下記のようなパートナーIDを設定してください。
 
     ```java
     import com.adjust.sdk.plugin.AdjustSociomantic;
@@ -52,9 +50,9 @@ Or integrate adjust with Sociomantic events by following these steps:
     AdjustSociomantic.injectPartnerIdInSociomanticEvents("{sociomanticPartnerId}");
     ```
 
-6. Now you can integrate each of the different Sociomantic events, like in the following examples:
+6. これで個々のSociomanticイベントを連携できます。例は以下をご参照ください。
 
-### Customer Event
+### カスタマーイベント
 
 ```java
 import com.adjust.sdk.plugin.AdjustSociomantic;
@@ -68,7 +66,7 @@ AdjustSociomantic.injectCustomerDataIntoEvent(event, customerData);
 Adjust.trackEvent(event);
 ```
 
-### View Home Page
+### ホームページ閲覧
 
 ```java
 import com.adjust.sdk.plugin.AdjustSociomantic;
@@ -78,7 +76,7 @@ AdjustEvent event = new AdjustEvent(HOMEPAGE_TOKEN);
 Adjust.trackEvent(event);
 ```
 
-### View Listing
+### リスティング閲覧
 
 ```java
 import com.adjust.sdk.plugin.AdjustSociomantic;
@@ -97,7 +95,7 @@ AdjustSociomantic.injectViewListingIntoEvent(event, categories, date);
 Adjust.trackEvent(event);
 ```
 
-### View Product
+### プロダクト閲覧
 
 ```java
 import com.adjust.sdk.plugin.AdjustSociomantic;
@@ -117,7 +115,7 @@ AdjustSociomantic.injectProductIntoEvent(event, "123456", product);
 
 Adjust.trackEvent(event);
 ```
-*Available product parameters for reporting product view*
+*プロダクトのレポートに利用できるプロダクトパラメータ*
 
 <table>
 <colgroup>
@@ -128,101 +126,101 @@ Adjust.trackEvent(event);
 </colgroup>
 <thead>
 <tr class="header">
-    <th align="left">Parameter name</th>
-    <th align="left">Requirement</th>
-    <th align="left">Description</th>
-    <th align="left">Note</th>
+    <th align="left">パラメータ名</th>
+    <th align="left">条件</th>
+    <th align="left">説明</th>
+    <th align="left">備考</th>
 </tr>
 </thead>
 <tbody>
 
 <tr class="odd">
     <td align="left">SCMCategory</td>
-    <td align="left">Required*</td>
-    <td align="left">Product category (entire category path)</td>
-    <td align="left">Category information provided in the tracking code on category or listing pages should match the category information provided in the feed or in the tracking code of product pages.</td>
+    <td align="left">必須*</td>
+    <td align="left">プロダクトのカテゴリ (カテゴリのパス全て)</td>
+    <td align="left">カテゴリまたはリスティングページのトラッキングコード内にあるカテゴリ情報は、フィードもしくはプロダクトページのトラッキングコード内のカテゴリ情報と一致する必要があります。</td>
 </tr>
 <tr class="even">
     <td align="left">SCMProductName</td>
-    <td align="left">Required*</td>
-    <td align="left">Product name</td>
-    <td align="left">Special characters should not be encoded but provided in proper UTF-8. Do not use any HTML markup.</td>
+    <td align="left">必須*</td>
+    <td align="left">プロダクト名</td>
+    <td align="left">特殊文字を含めず、UFT-8でエンコードしてください。HTMLマークアップは使えません。</td>
 </tr>
 <tr class="odd">
     <td align="left">SCMSalePrice</td>
-    <td align="left">Required*</td>
-    <td align="left">Sale price as decimal value (e.g. 2.99)</td>
-    <td align="left">Please use a dot as a decimal separator and do not use any thousand separators.</td>
+    <td align="left">必須*</td>
+    <td align="left">小数値でのセール価格(例 2.99)</td>
+    <td align="left">小数点にはドットをお使いください。ドットやカンマなどの3桁区切りは入れないでください。</td>
 </tr>
 <tr class="even">
     <td align="left">SCMAmount</td>
-    <td align="left">Required*</td>
-    <td align="left">Regular price as decimal value (e.g. 3.99)</td>
-    <td align="left">Please use a dot as a decimal separator and do not use any thousand separators.</td>
+    <td align="left">必須*</td>
+    <td align="left">小数値の通常価格 (例 3.99)</td>
+    <td align="left">小数点にはドットをお使いください。ドットやカンマなどの3桁区切りは入れないでください。</td>
 </tr>
 <tr class="odd">
     <td align="left">SCMCurrency</td>
-    <td align="left">Required*</td>
-    <td align="left">Currency code in ISO 4217 format (e.g. EUR)</td>
-    <td align="left">Fixed currency code. Should have been provided to you in the tracking code examples.</td>
+    <td align="left">必須*</td>
+    <td align="left">ISO 4217 formatにおける通貨コード (例 EUR)</td>
+    <td align="left">トラッキングコード例で確認できます。</td>
 </tr>
 <tr class="even">
     <td align="left">SCMProductURL></td>
-    <td align="left">Required*</td>
-    <td align="left">Product URL (deeplink)</td>
-    <td align="left">Please provide a working deeplink ideally without any click tracking parameter (Google Analytics, HURRA, Eulerian, etc.), Please always use deeplinks with http://</td>
+    <td align="left">必須*</td>
+    <td align="left">プロダクトURL (ディープリンク)</td>
+    <td align="left">機能しているディープリンクを入れてください。できればGoogleアナリティクス、HURRA、Eulerianなどのトラッキングパラメータをつけないでください。。必ず http:// をつけたディープリンクをお使いください。</td>
 </tr>
 <tr class="odd">
     <td align="left">SCMProductImageURL</td>
-    <td align="left">Required*</td>
-    <td align="left">Product image URL</td>
-    <td align="left">Please provide images in a reasonable size. For an optimal appearance in the ads the images should be at least 200x200px and should have the same aspect ratio.</td>
+    <td align="left">必須*</td>
+    <td align="left">プロダクトの画像URL</td>
+    <td align="left">適切な大きさの画像をご用意ください。広告内に任意で表示されるがそうの大きさは最低200x200pxで、同じアスペクト比である必要があります。</td>
 </tr>
 <tr class="even">
     <td align="left">SCMBrand</td>
-    <td align="left">Required*</td>
-    <td align="left">Product brand</td>
-    <td align="left">Special characters should not be encoded but provided in proper UTF-8 (Same as SCMProductName above). Do not use any HTML markup.</td>
+    <td align="left">必須*</td>
+    <td align="left">プロダクトのブランド</td>
+    <td align="left">上記SCMProductNameと同様、特殊文字を含めず、UFT-8でエンコードしてください。HTMLマークアップは使えません。</td>
 </tr>
 <tr class="odd">
     <td align="left">SCMDescription</td>
-    <td align="left">Optional</td>
-    <td align="left">Short product description</td>
-    <td align="left">Special characters should not be encoded but provided in proper UTF-8 (Same as SCMProductName above). Do not use any HTML markup.</td>
+    <td align="left">任意</td>
+    <td align="left">プロダクトの短い説明</td>
+    <td align="left">上記SCMProductNameと同様、特殊文字を含めず、UFT-8でエンコードしてください。HTMLマークアップは使えません。</td>
 </tr>
 <tr class="even">
     <td align="left">SCMTimestamp</td>
-    <td align="left">Optional</td>
-    <td align="left">Timestamp until when the product is available (please use GMT time)</td>
-    <td align="left">Please provide the date a visitor has searched for. It should be an NSTimeInterval wrapped in NSNumber (see example).</td>
+    <td align="left">任意</td>
+    <td align="left">プロダクトが利用可能になるまでのタイムスタンプ (GMT時間で入力してください)</td>
+    <td align="left">ユーザーが検索した日付を入れてください。NSTimeIntervalをNSNumberに入れ子してください。(例を参照)</td>
 </tr>
 <tr class="odd">
     <td align="left">SCMValidityTimestamp</td>
-    <td align="left">Optional</td>
-    <td align="left">Timestamp until when the product is available (please use GMT time)</td>
-    <td align="left">Please provide the unix timestamp until when the product is available. Please use 0 for products that are always available. It should be an NSTimeInterval wrapped in NSNumber (Same as SCMTimestamp above).</td>
+    <td align="left">任意</td>
+    <td align="left">プロダクトが利用可能になるまでのタイムスタンプ (GMT時間で入力してください)</td>
+    <td align="left">プロダクトが利用可能になるまでのunixのタイムスタンプを入れてください。常に利用可能なプロダクトは0を入れてください。ユーザーが検索した日付を入れてください。NSTimeIntervalをNSNumberに入れ子してください。(上記SCMTimestampと同様)</td>
 </tr>
 <tr class="even">
     <td align="left">SCMQuantity</td>
-    <td align="left">Optional</td>
-    <td align="left">Number of products in stock</td>
-    <td align="left">Please integrate this field only after discussion with your personal Sociomantic contact</td>
+    <td align="left">任意</td>
+    <td align="left">プロダクトの在庫数</td>
+    <td align="left">必ずSociomanticの担当者にご相談の上、この欄に入力してください。</td>
 </tr>
 <tr class="odd">
     <td align="left">SCMScore</td>
-    <td align="left">Optional</td>
-    <td align="left">Priority score of the product (value range is between 0 to 10.0)</td>
-    <td align="left">Please integrate this field only after discussion with your personal Sociomantic contact</td>
+    <td align="left">任意</td>
+    <td align="left">プロダクトの優先度スコア (0 から 10.0 までの数値)</td>
+    <td align="left">必ずSociomanticの担当者にご相談の上、この欄に入力してください。</td>
 </tr>
 
 </tbody>
 </table>
 
-\*optional, if provided in the feed
+\*任意。フィード上で確認できれば入力してください。
 
-If you’re not certain what setup you should use please contact your Technical Account Manager at Sociomantic.
+設定についてご質問があれば、Sociomanticの技術アカウントマネージャーまでご連絡ください。
 
-### Cart
+### カート
 
 ```java
 import com.adjust.sdk.plugin.AdjustSociomantic;
@@ -246,7 +244,7 @@ AdjustSociomantic.injectCartIntoEvent(event, products);
 Adjust.trackEvent(event);
 ```
 
-*Available cart parameters for reporting cart view*
+*カートのレポートに利用できるプロダクトパラメータ*
 
 <table>
 <colgroup>
@@ -257,42 +255,42 @@ Adjust.trackEvent(event);
 </colgroup>
 <thead>
 <tr class="header">
-    <th align="left">Parameter name</th>
-    <th align="left">Requirement</th>
-    <th align="left">Description</th>
-    <th align="left">Note</th>
+    <th align="left">パラメータ名</th>
+    <th align="left">条件</th>
+    <th align="left">説明</th>
+    <th align="left">備考</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
     <td align="left">SCMProductID</td>
-    <td align="left">Required</td>
-    <td align="left">Product ID</td>
-    <td align="left">Please provide the product ID without any subIDs for any color or size variations.</td>
+    <td align="left">必須</td>
+    <td align="left">プロダクトID</td>
+    <td align="left">カラーやサイズなどのバリエーションのサブIDは含めないでください。</td>
 </tr>
 <tr class="even">
     <td align="left">SCMAmount</td>
-    <td align="left">Optional</td>
-    <td align="left">Product price as decimal value (e.g. 2.99)</td>
-    <td align="left">Please use a dot as a decimal separator and do not use any thousand separators. Please only provide price per product, even if quantity has a value larger than 1.</td>
+    <td align="left">任意</td>
+    <td align="left">小数値での販売価格 (例 2.99)</td>
+    <td align="left">小数点にはドットをお使いください。ドットやカンマなどの3桁区切りは入れないでください。個数が2以上であっても、1商品あたりの価格を入れてください。</td>
 </tr>
 <tr class="odd">
     <td align="left">SCMCurrency</td>
-    <td align="left">Optional</td>
-    <td align="left">Currency code in ISO 4217 format (e.g. EUR)</td>
-    <td align="left">Fixed currency code. Should have been provided to you in the tracking code examples.</td>
+    <td align="left">任意</td>
+    <td align="left">ISO 4217 formatにおける通貨コード (例 EUR)</td>
+    <td align="left">トラッキングコード例で確認できます。</td>
 </tr>
 <tr class="even">
     <td align="left">SCMQuantity</td>
-    <td align="left">Optional</td>
-    <td align="left">Quantity of the product selected</td>
-    <td align="left">Please use an integer value.</td>
+    <td align="left">任意</td>
+    <td align="left">選択したプロダクトの個数</td>
+    <td align="left">整数値を入れてください。</td>
 </tr>
 
 </tbody>
 </table>
 
-### Unconfirmed Transaction
+### 未確認トランザクション
 
 ```java
 import com.adjust.sdk.plugin.AdjustSociomantic;
@@ -316,7 +314,7 @@ AdjustSociomantic.injectTransactionIntoEvent(event, "123456", products);
 Adjust.trackEvent(event);
 ```
 
-Or with parameters:
+パラメータがあれば
 
 ```java
 import com.adjust.sdk.plugin.AdjustSociomantic;
@@ -344,7 +342,7 @@ AdjustSociomantic.injectTransactionIntoEvent(event, "123456", products, paramete
 Adjust.trackEvent(event);
 ```
 
-### Confirmed Transaction
+### 確認済みトランザクション
 
 ```java
 import com.adjust.sdk.plugin.AdjustSociomantic;
@@ -368,7 +366,7 @@ AdjustSociomantic.injectConfirmedTransactionIntoEvent(event, "123456", products)
 Adjust.trackEvent(event);
 ```
 
-Or with parameters:
+パラメータがあれば
 
 ```java
 import com.adjust.sdk.plugin.AdjustSociomantic;
@@ -396,11 +394,11 @@ AdjustSociomantic.injectConfirmedTransactionIntoEvent(event, "123456", products,
 Adjust.trackEvent(event);
 ```
 
-*Available cart parameters for reporting transaction view*
+*トランザクションのレポートに利用できるカートパラメータ*
 
-See cart parameters
+カートパラメータをご参照ください。
 
-*Available transaction parameters for reporting transaction views*
+*トランザクションのレポートに利用できるトランザクションパラメータ*
 
 <table>
 <colgroup>
@@ -411,36 +409,36 @@ See cart parameters
 </colgroup>
 <thead>
 <tr class="header">
-    <th align="left">Parameter name</th>
-    <th align="left">Requirement</th>
-    <th align="left">Description</th>
-    <th align="left">Note</th>
+    <th align="left">パラメータ名</th>
+    <th align="left">条件</th>
+    <th align="left">説明</th>
+    <th align="left">備考</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
     <td align="left">SCMAmount</td>
-    <td align="left">Optional</td>
-    <td align="left">Product price as decimal value (e.g. 2.99)</td>
-    <td align="left">Please use a dot as a decimal separator and do not use any thousand separators. Please only provide price per product, even if quantity has a value larger than 1.</td>
+    <td align="left">任意</td>
+    <td align="left">小数値の販売価格 (例 2.99)</td>
+    <td align="left">小数点にはドットをお使いください。ドットやカンマなどの3桁区切りは入れないでください。個数が2以上であっても、1商品あたりの価格を入れてください。</td>
 </tr>
 <tr class="even">
     <td align="left">SCMCurrency</td>
-    <td align="left">Optional</td>
-    <td align="left">Currency code in ISO 4217 format (e.g. EUR)</td>
-    <td align="left">Fixed currency code. Should have been provided to you in the tracking code examples.</td>
+    <td align="left">任意</td>
+    <td align="left">ISO 4217 formatにおける通貨コード (例 EUR)</td>
+    <td align="left">トラッキングコード例で確認できます。</td>
 </tr>
 <tr class="odd">
     <td align="left">SCMQuantity</td>
-    <td align="left">Optional</td>
-    <td align="left">Quantity of the product selected</td>
-    <td align="left">Please use an integer value.</td>
+    <td align="left">任意</td>
+    <td align="left">選択したプロダクトの個数</td>
+    <td align="left">整数値を入れてください。</td>
 </tr>
 
 </tbody>
 </table>
 
-### Lead Event
+### リードイベント
 
 ```java
 import com.adjust.sdk.plugin.AdjustSociomantic;
@@ -452,7 +450,7 @@ AdjustSociomantic.injectLeadIntoEvent(event, "123456");
 Adjust.trackEvent(event);
 ```
 
-Or confirmed lead:
+リードが確認済みであれば
 
 ```java
 import com.adjust.sdk.plugin.AdjustSociomantic;
