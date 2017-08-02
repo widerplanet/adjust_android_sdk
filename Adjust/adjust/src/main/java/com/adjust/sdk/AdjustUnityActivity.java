@@ -20,9 +20,6 @@ public class AdjustUnityActivity extends UnityPlayerActivity {
     @Override
     public void onNewIntent(Intent intent) {
         Log.d("Adjust", "onNewIntent() called");
-        Uri data = intent.getData();
-        if(data != null) {
-            Adjust.appWillOpenUrl(data);
-        } 
+        this.setIntent(intent);
     }
 }
