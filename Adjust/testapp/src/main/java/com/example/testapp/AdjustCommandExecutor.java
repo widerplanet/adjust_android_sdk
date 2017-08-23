@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.Map;
 
 import static com.example.testapp.MainActivity.TAG;
+import static com.example.testapp.MainActivity.testLibrary;
 
 /**
  * Created by nonelse on 10.03.17.
@@ -68,6 +69,7 @@ public class AdjustCommandExecutor {
                 case "teardown": teardown(); break;
                 case "openDeeplink": openDeeplink(); break;
                 case "sendReferrer": sendReferrer(); break;
+                case "sendTestInfo": sendTestInfo(); break;
                 case "testBegin": testBegin(); break;
                 case "testEnd": testEnd(); break;
             }
@@ -75,6 +77,12 @@ public class AdjustCommandExecutor {
             ex.printStackTrace();
             Log.e(TAG, "executeCommand: failed to parse command. Check commands' syntax");
         }
+    }
+
+    private void sendTestInfo() {
+        String testInfo = command.getFirstParameterValue("testInfo");
+        testLibrary.addInfoToSend("testInfo", testInfo);
+        testLibrary.sendInfoToServer();
     }
 
     private void factory() {
