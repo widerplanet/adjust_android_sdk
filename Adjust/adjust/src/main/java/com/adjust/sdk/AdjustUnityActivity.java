@@ -13,13 +13,11 @@ import android.net.Uri;
 public class AdjustUnityActivity extends UnityPlayerActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        Log.d("Adjust", "onCreate() called");
         super.onCreate(savedInstanceState);
     }
 
     @Override
     public void onNewIntent(Intent intent) {
-        Log.d("Adjust", "onNewIntent() called");
         this.setIntent(intent);
     }
 }
