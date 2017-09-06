@@ -27,7 +27,6 @@ import static com.example.testapp.CommandListener.debug;
 
 public class MainActivity extends AppCompatActivity {
     public static TestLibrary testLibrary;
-    private CommandListener commandListener;
     public static final String TAG = "TestApp";
 
     @Override
@@ -35,10 +34,12 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        commandListener = new CommandListener(this.getApplicationContext());
-        String baseUrl = "https://10.0.2.2:8443";
+        CommandListener commandListener = new CommandListener(this.getApplicationContext());
+//        String baseUrl = "https://10.0.2.2:8443";
+        String baseUrl = "https://jenkins-1.adjust.com:8443";
         AdjustFactory.setTestingMode(baseUrl);
         testLibrary = new TestLibrary(baseUrl, commandListener);
+        testLibrary.setTests("current/Test_Event_Count;current/Test_Event_OrderId;current/pre4120/Test_Disable_Enable;current/pre4120/Test_EventBuffering;current/Test_DefaultTracker;current/Test_DelayStart");
         startTestSession();
     }
 
@@ -47,9 +48,5 @@ public class MainActivity extends AppCompatActivity {
         //testLibrary.doNotExitAfterEnd();
         testLibrary.initTestSession("android4.11.4");
         //testLibrary.initTest("android4.11.4", "Test_Event");
-    }
-
-    public void onStartTestSession(View v) {
-        startTestSession();
     }
 }
