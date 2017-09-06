@@ -5,6 +5,7 @@
 USERNAME=uerceg
 API_KEY=DA4C8134398C40F7991CCD80EFC63BCE
 TEST_SUITE_ID_ONE=7
+TEST_SUITE_ID_TWO=15
 UPLOAD_APK_ENDPOINT=https://app.testobject.com:443/api/storage/upload
 UPDATE_APK_ENDPOINT=https://app.testobject.com/api/rest/v2/appium/suites
 
@@ -28,12 +29,19 @@ function runTestScript {
     echo '[*] runTestScript(): ENTER'
     cd ${ROOT_DIR}/${SCRIPTS_DIR}/${JUNIT_PROJECT_DIR}
 
+    #echo "[*] Updating app to version ${UPDATED_APP_VERSION_ID}"
+    #curl -u "${API_KEY}:" -X PUT --header 'Content-Type: application/json' --header 'Accept: application/json' -d "{\"appVersionId\": ${UPDATED_APP_VERSION_ID}}" "${UPDATE_APK_ENDPOINT}/${TEST_SUITE_ID_ONE}"
+    #echo '[*] Update complete'
+
+    #echo '[*] runTestScript(): Running test one'
+    #mvn -Dtest=TestOne test
+
     echo "[*] Updating app to version ${UPDATED_APP_VERSION_ID}"
-    curl -u "${API_KEY}:" -X PUT --header 'Content-Type: application/json' --header 'Accept: application/json' -d "{\"appVersionId\": ${UPDATED_APP_VERSION_ID}}" "${UPDATE_APK_ENDPOINT}/${TEST_SUITE_ID_ONE}"
+    curl -u "${API_KEY}:" -X PUT --header 'Content-Type: application/json' --header 'Accept: application/json' -d "{\"appVersionId\": ${UPDATED_APP_VERSION_ID}}" "${UPDATE_APK_ENDPOINT}/${TEST_SUITE_ID_TWO}"
     echo '[*] Update complete'
 
-    echo '[*] runTestScript(): Running test one'
-    mvn -Dtest=TestOne test
+    echo '[*] runTestScript(): Running test two'
+    mvn -Dtest=TestTwo test
 
 
     echo '[*] runTestScript(): EXIT'
