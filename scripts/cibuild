@@ -5,8 +5,6 @@
 USERNAME=uerceg
 API_KEY=DA4C8134398C40F7991CCD80EFC63BCE
 TEST_SUITE_ID_ONE=7
-TEST_SUITE_ID_TWO=8
-TEST_SUITE_ID_THREE=16
 UPLOAD_APK_ENDPOINT=https://app.testobject.com:443/api/storage/upload
 UPDATE_APK_ENDPOINT=https://app.testobject.com/api/rest/v2/appium/suites
 
@@ -38,22 +36,7 @@ function runTestScript {
     mvn -Dtest=TestOne test
 
 
-    #echo "[*] Updating app to version ${UPDATED_APP_VERSION_ID}"
-    #curl -u "${API_KEY}:" -X PUT --header 'Content-Type: application/json' --header 'Accept: application/json' -d "{\"appVersionId\": ${UPDATED_APP_VERSION_ID}}" "${UPDATE_APK_ENDPOINT}/${TEST_SUITE_ID_TWO}"
-    #echo '[*] Update complete'
-
-    #echo '[*] runTestScript(): Running test two'
-    #mvn -Dtest=TestTwo test
-
-
-    #echo "[*] Updating app to version ${UPDATED_APP_VERSION_ID}"
-    #curl -u "${API_KEY}:" -X PUT --header 'Content-Type: application/json' --header 'Accept: application/json' -d "{\"appVersionId\": ${UPDATED_APP_VERSION_ID}}" "${UPDATE_APK_ENDPOINT}/${TEST_SUITE_ID_THREE}"
-    #echo '[*] Update complete'
-
-    #echo '[*] runTestScript(): Running test three'
-    #mvn -Dtest=TestThree test
-
-    #echo '[*] runTestScript(): EXIT'
+    echo '[*] runTestScript(): EXIT'
 }
 
 ## Entry point
