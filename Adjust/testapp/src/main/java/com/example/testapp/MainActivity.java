@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
         String baseUrl = "https://jenkins-1.adjust.com:8443";
         AdjustFactory.setTestingMode(baseUrl);
         testLibrary = new TestLibrary(baseUrl, commandListener);
-        testLibrary.setTests("current/Test_Event_Count;current/Test_Event_OrderId;current/pre4120/Test_Disable_Enable;current/pre4120/Test_EventBuffering;current/Test_DefaultTracker;current/Test_DelayStart");
+//        testLibrary.setTests("current/Test_Event_Count;current/Test_Event_OrderId;current/pre4120/Test_Disable_Enable;current/pre4120/Test_EventBuffering;current/Test_DefaultTracker;current/Test_DelayStart");
         startTestSession();
     }
 
