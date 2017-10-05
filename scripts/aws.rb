@@ -4,7 +4,7 @@ require 'aws-sdk'
 require 'net/http'
 
 $PROJECT_ARN = 'arn:aws:devicefarm:us-west-2:645274582855:project:0284e5ea-0b06-4073-9db0-6c35f5b43a57'
-$DEVICE_POOL_ARN = 'arn:aws:devicefarm:us-west-2:645274582855:devicepool:7d61ace2-1b2c-4189-8cd9-c3a9ef52eea1/cb79b3c8-739c-49fe-a0fb-79eff72b7f58'
+$DEVICE_POOL_ARN = 'arn:aws:devicefarm:us-west-2:645274582855:devicepool:0284e5ea-0b06-4073-9db0-6c35f5b43a57/5d1adec1-9c26-4f5f-a29b-caa334d17371'
 $APK_FILENAME='app.apk'
 $TEST_PACKAGE_FILENAME='test_bundle.zip'
 
