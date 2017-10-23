@@ -18,7 +18,7 @@ import java.net.URL;
 import java.util.List;
 import org.openqa.selenium.OutputType;
 
-@TestObject(testObjectApiKey = "DA4C8134398C40F7991CCD80EFC63BCE", testObjectSuiteId = 8)
+@TestObject(testObjectApiKey = "DA4C8134398C40F7991CCD80EFC63BCE", testObjectSuiteId = 15)
 @RunWith(TestObjectAppiumSuite.class)
 public class TestTwo{
     public static String PACKAGE_NAME = "com.example.testapp";
