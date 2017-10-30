@@ -16,6 +16,7 @@ import android.content.res.Configuration;
 import android.os.AsyncTask;
 import android.os.Looper;
 import android.provider.Settings.Secure;
+import android.util.Log;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -26,6 +27,7 @@ import java.io.FileOutputStream;
 import java.io.NotSerializableException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.lang.ref.WeakReference;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.text.DecimalFormat;
@@ -78,34 +80,34 @@ public class Util {
         return Reflection.getPlayAdId(context);
     }
 
-    public static void getGoogleAdId(Context context, final OnDeviceIdsRead onDeviceIdRead) {
-        ILogger logger = AdjustFactory.getLogger();
-        if (Looper.myLooper() != Looper.getMainLooper()) {
-            logger.debug("GoogleAdId being read in the background");
-            String GoogleAdId = Util.getPlayAdId(context);
+    public static void getGoogleAdId(Context context, final OnDeviceIdsRead onDeviceIdsRead) {
+        new Thread(new advertisingIdRunnable(context, onDeviceIdsRead)).start();
+    }
 
-            logger.debug("GoogleAdId read " + GoogleAdId);
-            onDeviceIdRead.onGoogleAdIdRead(GoogleAdId);
-            return;
+    private static class advertisingIdRunnable implements Runnable {
+        private WeakReference<Context> context;
+        private OnDeviceIdsRead onDeviceIdsRead;
+
+        advertisingIdRunnable(Context context, OnDeviceIdsRead onDeviceIdsRead) {
+            this.context = new WeakReference<>(context);
+            this.onDeviceIdsRead = onDeviceIdsRead;
         }
 
-        logger.debug("GoogleAdId being read in the foreground");
-        new AsyncTask<Context,Void,String>() {
-            @Override
-            protected String doInBackground(Context... params) {
-                ILogger logger = AdjustFactory.getLogger();
-                Context innerContext = params[0];
-                String innerResult = Util.getPlayAdId(innerContext);
-                logger.debug("GoogleAdId read " + innerResult);
-                return innerResult;
+        @Override
+        public void run() {
+            ILogger logger = AdjustFactory.getLogger();
+
+            Context contextRef = this.context.get();
+            if (contextRef == null) {
+                return;
             }
 
-            @Override
-            protected void onPostExecute(String playAdiId) {
-                ILogger logger = AdjustFactory.getLogger();
-                onDeviceIdRead.onGoogleAdIdRead(playAdiId);
-            }
-        }.execute(context);
+            logger.debug("GoogleAdId being read in the background");
+            String GoogleAdId = getPlayAdId(contextRef);
+
+            logger.debug("GoogleAdId read " + GoogleAdId);
+            this.onDeviceIdsRead.onGoogleAdIdRead(GoogleAdId);
+        }
     }
 
     public static Boolean isPlayTrackingEnabled(Context context) {
@@ -119,6 +121,7 @@ public class Util {
     public static Map<String, String> getPluginKeys(Context context) {
         return Reflection.getPluginKeys(context);
     }
+
     public static String getAndroidId(Context context) {
         return Reflection.getAndroidId(context);
     }
@@ -363,8 +366,8 @@ public class Util {
         // get the random range
         double randomDouble = randomInRange(backoffStrategy.minRange, backoffStrategy.maxRange);
         // apply jitter factor
-        double waitingTime =  ceilingTime * randomDouble;
-        return (long)waitingTime;
+        double waitingTime = ceilingTime * randomDouble;
+        return (long) waitingTime;
     }
 
     private static double randomInRange(double minRange, double maxRange) {
