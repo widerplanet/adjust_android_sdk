@@ -128,27 +128,27 @@ public class GlobalApplication extends Application {
         // config.setDelayStart(7);
 
         // Add session callback parameters.
-        Adjust.addSessionCallbackParameter("sc_foo", "sc_bar");
-        Adjust.addSessionCallbackParameter("sc_key", "sc_value");
+        Adjust.INSTANCE.addSessionCallbackParameter("sc_foo", "sc_bar");
+        Adjust.INSTANCE.addSessionCallbackParameter("sc_key", "sc_value");
 
         // Add session partner parameters.
-        Adjust.addSessionPartnerParameter("sp_foo", "sp_bar");
-        Adjust.addSessionPartnerParameter("sp_key", "sp_value");
+        Adjust.INSTANCE.addSessionPartnerParameter("sp_foo", "sp_bar");
+        Adjust.INSTANCE.addSessionPartnerParameter("sp_key", "sp_value");
 
         // Remove session callback parameters.
-        Adjust.removeSessionCallbackParameter("sc_foo");
+        Adjust.INSTANCE.removeSessionCallbackParameter("sc_foo");
 
         // Remove session partner parameters.
-        Adjust.removeSessionPartnerParameter("sp_key");
+        Adjust.INSTANCE.removeSessionPartnerParameter("sp_key");
 
         // Remove all session callback parameters.
-        Adjust.resetSessionCallbackParameters();
+        Adjust.INSTANCE.resetSessionCallbackParameters();
 
         // Remove all session partner parameters.
-        Adjust.resetSessionPartnerParameters();
+        Adjust.INSTANCE.resetSessionPartnerParameters();
 
         // Initialise the adjust SDK.
-        Adjust.onCreate(config);
+        Adjust.INSTANCE.onCreate(config);
 
         // Abort delay for the first session introduced with setDelayStart method.
         // Adjust.sendFirstPackages();
@@ -171,12 +171,12 @@ public class GlobalApplication extends Application {
     private static final class AdjustLifecycleCallbacks implements ActivityLifecycleCallbacks {
         @Override
         public void onActivityResumed(Activity activity) {
-            Adjust.onResume();
+            Adjust.INSTANCE.onResume();
         }
 
         @Override
         public void onActivityPaused(Activity activity) {
-            Adjust.onPause();
+            Adjust.INSTANCE.onPause();
         }
 
         @Override

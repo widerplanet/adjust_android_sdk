@@ -19,6 +19,6 @@ public class AdjustReferrerReceiver extends BroadcastReceiver {
             return;
         }
 
-        Adjust.getDefaultInstance().sendReferrer(rawReferrer, context);
+        Adjust.INSTANCE.getDefaultInstance().sendReferrer(rawReferrer, context);
     }
 }

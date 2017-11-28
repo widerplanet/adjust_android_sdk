@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         Uri data = intent.getData();
-        Adjust.appWillOpenUrl(data);
+        Adjust.INSTANCE.appWillOpenUrl(data);
 
         // Adjust UI according to SDK state.
         btnEnableDisableSDK = (Button)findViewById(R.id.btnEnableDisableSDK);
@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
     public void onResume() {
         super.onResume();
 
-        if (Adjust.isEnabled()) {
+        if (Adjust.INSTANCE.isEnabled()) {
             btnEnableDisableSDK.setText(R.string.txt_disable_sdk);
         } else {
             btnEnableDisableSDK.setText(R.string.txt_enable_sdk);
@@ -69,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
     public void onTrackSimpleEventClick(View v) {
         AdjustEvent event = new AdjustEvent(EVENT_TOKEN_SIMPLE);
 
-        Adjust.trackEvent(event);
+        Adjust.INSTANCE.trackEvent(event);
     }
 
     public void onTrackRevenueEventClick(View v) {
@@ -78,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
         // Add revenue 1 cent of an euro.
         event.setRevenue(0.01, "EUR");
 
-        Adjust.trackEvent(event);
+        Adjust.INSTANCE.trackEvent(event);
     }
 
     public void onTrackCallbackEventClick(View v) {
@@ -87,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
         // Add callback parameters to this parameter.
         event.addCallbackParameter("key", "value");
 
-        Adjust.trackEvent(event);
+        Adjust.INSTANCE.trackEvent(event);
     }
 
     public void onTrackPartnerEventClick(View v) {
@@ -96,32 +96,32 @@ public class MainActivity extends AppCompatActivity {
         // Add partner parameters to this parameter.
         event.addPartnerParameter("foo", "bar");
 
-        Adjust.trackEvent(event);
+        Adjust.INSTANCE.trackEvent(event);
     }
 
     public void onEnableDisableOfflineModeClick(View v) {
         if (((Button)v).getText().equals(
                 getApplicationContext().getResources().getString(R.string.txt_enable_offline_mode))) {
-            Adjust.setOfflineMode(true);
+            Adjust.INSTANCE.setOfflineMode(true);
             ((Button)v).setText(R.string.txt_disable_offline_mode);
         } else {
-            Adjust.setOfflineMode(false);
+            Adjust.INSTANCE.setOfflineMode(false);
             ((Button)v).setText(R.string.txt_enable_offline_mode);
         }
     }
 
     public void onEnableDisableSDKClick(View v) {
-        if (Adjust.isEnabled()) {
-            Adjust.setEnabled(false);
+        if (Adjust.INSTANCE.isEnabled()) {
+            Adjust.INSTANCE.setEnabled(false);
             ((Button)v).setText(R.string.txt_enable_sdk);
         } else {
-            Adjust.setEnabled(true);
+            Adjust.INSTANCE.setEnabled(true);
             ((Button)v).setText(R.string.txt_disable_sdk);
         }
     }
 
     public void onIsSDKEnabledClick(View v) {
-        if (Adjust.isEnabled()) {
+        if (Adjust.INSTANCE.isEnabled()) {
             Toast.makeText(getApplicationContext(), R.string.txt_sdk_is_enabled,
                     Toast.LENGTH_SHORT).show();
         } else {

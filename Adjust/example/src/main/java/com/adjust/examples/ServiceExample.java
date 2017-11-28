@@ -42,10 +42,10 @@ public class ServiceExample extends Service {
         Log.d("example", "ServiceExample onStartCommand");
 
         if (flip) {
-            Adjust.setEnabled(false);
+            Adjust.INSTANCE.setEnabled(false);
             flip = false;
         } else {
-            Adjust.setEnabled(true);
+            Adjust.INSTANCE.setEnabled(true);
             flip = true;
         }
 
@@ -57,7 +57,7 @@ public class ServiceExample extends Service {
                 Log.d("example", "ServiceExample background awake");
 
                 AdjustEvent event = new AdjustEvent(EVENT_TOKEN_BACKGROUND);
-                Adjust.trackEvent(event);
+                Adjust.INSTANCE.trackEvent(event);
 
                 Log.d("example", "ServiceExample background event tracked");
 
