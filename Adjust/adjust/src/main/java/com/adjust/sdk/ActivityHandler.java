@@ -273,19 +273,16 @@ public class ActivityHandler implements IActivityHandler {
     public void onResume() {
         internalState.background = false;
 
-        scheduledExecutor.submit(new Runnable() {
-            @Override
-            public void run() {
-                delayStartI();
+        scheduledExecutor.submit(() -> {
+            delayStartI();
 
-                stopBackgroundTimerI();
+            stopBackgroundTimerI();
 
-                startForegroundTimerI();
+            startForegroundTimerI();
 
-                logger.verbose("Subsession start");
+            logger.verbose("Subsession start");
 
-                startI();
-            }
+            startI();
         });
     }
 
@@ -293,17 +290,14 @@ public class ActivityHandler implements IActivityHandler {
     public void onPause() {
         internalState.background = true;
 
-        scheduledExecutor.submit(new Runnable() {
-            @Override
-            public void run() {
-                stopForegroundTimerI();
+        scheduledExecutor.submit(() -> {
+            stopForegroundTimerI();
 
-                startBackgroundTimerI();
+            startBackgroundTimerI();
 
-                logger.verbose("Subsession end");
+            logger.verbose("Subsession end");
 
-                endI();
-            }
+            endI();
         });
     }
 
