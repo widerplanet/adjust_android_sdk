@@ -30,10 +30,10 @@ task clearJar(type: Delete) {
 }
 
 task makeJar(type: Copy) {
-    from('build/intermediates/bundles/default/')
+    from('build/intermediates/bundles/debug/')
     into('build/outputs/')
     include('classes.jar')
-    rename ('classes.jar', "adjust-${getVersionName()}.jar")
+    rename('classes.jar', "adjust-${getVersionName()}.jar")
 }
 
 makeJar.dependsOn(clearJar, build)
