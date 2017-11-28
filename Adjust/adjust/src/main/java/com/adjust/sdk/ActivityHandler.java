@@ -76,7 +76,8 @@ public class ActivityHandler implements IActivityHandler {
         if (scheduledExecutor != null) {
             try {
                 scheduledExecutor.shutdownNow();
-            } catch(SecurityException se) {}
+            } catch (SecurityException se) {
+            }
         }
         if (packageHandler != null) {
             packageHandler.teardown(deleteState);
@@ -326,17 +327,17 @@ public class ActivityHandler implements IActivityHandler {
     public void finishedTrackingActivity(ResponseData responseData) {
         // redirect session responses to attribution handler to check for attribution information
         if (responseData instanceof SessionResponseData) {
-            attributionHandler.checkSessionResponse((SessionResponseData)responseData);
+            attributionHandler.checkSessionResponse((SessionResponseData) responseData);
             return;
         }
         // redirect sdk click responses to attribution handler to check for attribution information
         if (responseData instanceof SdkClickResponseData) {
-            attributionHandler.checkSdkClickResponse((SdkClickResponseData)responseData);
+            attributionHandler.checkSdkClickResponse((SdkClickResponseData) responseData);
             return;
         }
         // check if it's an event response
         if (responseData instanceof EventResponseData) {
-            launchEventResponseTasks((EventResponseData)responseData);
+            launchEventResponseTasks((EventResponseData) responseData);
             return;
         }
     }
@@ -474,7 +475,7 @@ public class ActivityHandler implements IActivityHandler {
     }
 
     @Override
-    public void sendFirstPackages () {
+    public void sendFirstPackages() {
         scheduledExecutor.submit(new Runnable() {
             @Override
             public void run() {
@@ -662,8 +663,7 @@ public class ActivityHandler implements IActivityHandler {
             logger.warn("Unable to get Google Play Services Advertising ID at start time");
             if (deviceInfo.macSha1 == null &&
                     deviceInfo.macShortMd5 == null &&
-                    deviceInfo.androidId == null)
-            {
+                    deviceInfo.androidId == null) {
                 logger.error("Unable to get any device id's. Please check if Proguard is correctly set with Adjust SDK");
             }
         } else {
@@ -714,8 +714,7 @@ public class ActivityHandler implements IActivityHandler {
         // configure delay start timer
         if (activityState == null &&
                 adjustConfig.delayStart != null &&
-                adjustConfig.delayStart > 0.0)
-        {
+                adjustConfig.delayStart > 0.0) {
             logger.info("Delay start configured");
             internalState.delayStart = true;
             delayStartTimer = new TimerOnce(new Runnable() {
@@ -752,7 +751,7 @@ public class ActivityHandler implements IActivityHandler {
     private void readConfigFile(Context context) {
         Properties properties;
 
-        try  {
+        try {
             InputStream inputStream = context.getAssets().open("adjust_config.properties");
             properties = new Properties();
             properties.load(inputStream);
@@ -863,7 +862,9 @@ public class ActivityHandler implements IActivityHandler {
     }
 
     private void checkAttributionStateI() {
-        if (!checkActivityStateI(activityState)) { return; }
+        if (!checkActivityStateI(activityState)) {
+            return;
+        }
 
         // if it's the first launch
         if (internalState.isFirstLaunch()) {
@@ -1220,8 +1221,7 @@ public class ActivityHandler implements IActivityHandler {
     }
 
     private boolean hasChangedStateI(boolean previousState, boolean newState,
-                                     String trueMessage, String falseMessage)
-    {
+                                     String trueMessage, String falseMessage) {
         if (previousState != newState) {
             return true;
         }
@@ -1236,8 +1236,7 @@ public class ActivityHandler implements IActivityHandler {
     }
 
     private void updateStatusI(boolean pausingState, String pausingMessage,
-                               String remainsPausedMessage, String unPausingMessage)
-    {
+                               String remainsPausedMessage, String unPausingMessage) {
         // it is changing from an active state to a pause state
         if (pausingState) {
             logger.info(pausingMessage);
@@ -1332,7 +1331,9 @@ public class ActivityHandler implements IActivityHandler {
     }
 
     private boolean updateActivityStateI(long now) {
-        if (!checkActivityStateI(activityState)) { return false; }
+        if (!checkActivityStateI(activityState)) {
+            return false;
+        }
 
         long lastInterval = now - activityState.lastActivity;
 
@@ -1451,7 +1452,7 @@ public class ActivityHandler implements IActivityHandler {
         double delayStartSeconds = adjustConfig.delayStart != null ? adjustConfig.delayStart : 0.0;
         long maxDelayStartMilli = AdjustFactory.getMaxDelayStart();
 
-        long delayStartMilli = (long)(delayStartSeconds * 1000);
+        long delayStartMilli = (long) (delayStartSeconds * 1000);
         if (delayStartMilli > maxDelayStartMilli) {
             double maxDelayStartSeconds = maxDelayStartMilli / 1000;
             String delayStartFormatted = Util.SecondsDisplayFormat.format(delayStartSeconds);
@@ -1621,11 +1622,19 @@ public class ActivityHandler implements IActivityHandler {
     }
 
     private void setPushTokenI(String token) {
-        if (!checkActivityStateI(activityState)) { return; }
-        if (!isEnabledI()) { return; }
+        if (!checkActivityStateI(activityState)) {
+            return;
+        }
+        if (!isEnabledI()) {
+            return;
+        }
 
-        if (token == null) { return; }
-        if (token.equals(activityState.pushToken)) { return; }
+        if (token == null) {
+            return;
+        }
+        if (token.equals(activityState.pushToken)) {
+            return;
+        }
 
         // save new push token
         activityState.pushToken = token;
@@ -1671,7 +1680,7 @@ public class ActivityHandler implements IActivityHandler {
             sessionParameters.callbackParameters = Util.readObject(context,
                     SESSION_CALLBACK_PARAMETERS_FILENAME,
                     SESSION_CALLBACK_PARAMETERS_NAME,
-                    (Class<Map<String,String>>)(Class)Map.class);
+                    (Class<Map<String, String>>) (Class) Map.class);
         } catch (Exception e) {
             logger.error("Failed to read %s file (%s)", SESSION_CALLBACK_PARAMETERS_NAME, e.getMessage());
             sessionParameters.callbackParameters = null;
@@ -1683,7 +1692,7 @@ public class ActivityHandler implements IActivityHandler {
             sessionParameters.partnerParameters = Util.readObject(context,
                     SESSION_PARTNER_PARAMETERS_FILENAME,
                     SESSION_PARTNER_PARAMETERS_NAME,
-                    (Class<Map<String,String>>)(Class)Map.class);
+                    (Class<Map<String, String>>) (Class) Map.class);
         } catch (Exception e) {
             logger.error("Failed to read %s file (%s)", SESSION_PARTNER_PARAMETERS_NAME, e.getMessage());
             sessionParameters.partnerParameters = null;
@@ -1812,8 +1821,8 @@ public class ActivityHandler implements IActivityHandler {
                     !isEnabledI();                  // is disabled
         }
         // other handlers are paused if either:
-        return internalState.isOffline()    ||      // it's offline
-                !isEnabledI()               ||      // is disabled
+        return internalState.isOffline() ||      // it's offline
+                !isEnabledI() ||      // is disabled
                 internalState.isInDelayedStart();   // is in delayed start
     }
 
