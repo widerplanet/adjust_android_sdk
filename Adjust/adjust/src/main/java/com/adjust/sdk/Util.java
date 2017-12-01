@@ -94,7 +94,7 @@ public class Util {
         }
 
         logger.debug("GoogleAdId being read in the foreground");
-        new AsyncTask<Context,Void,String>() {
+        new AsyncTask<Context, Void, String>() {
             @Override
             protected String doInBackground(Context... params) {
                 ILogger logger = AdjustFactory.getLogger();
@@ -123,9 +123,11 @@ public class Util {
     public static Map<String, String> getPluginKeys(Context context) {
         return Reflection.getPluginKeys(context);
     }
+
     public static String getAndroidId(Context context) {
         return Reflection.getAndroidId(context);
     }
+
     public static String getMobileEquipmentIdentity(Context context) {
         return Reflection.getMobileEquipmentIdentity(context);
     }
@@ -374,8 +376,8 @@ public class Util {
         // get the random range
         double randomDouble = randomInRange(backoffStrategy.minRange, backoffStrategy.maxRange);
         // apply jitter factor
-        double waitingTime =  ceilingTime * randomDouble;
-        return (long)waitingTime;
+        double waitingTime = ceilingTime * randomDouble;
+        return (long) waitingTime;
     }
 
     private static double randomInRange(double minRange, double maxRange) {
@@ -516,5 +518,9 @@ public class Util {
             AdjustFactory.getLogger().warn("Couldn't return mnc");
             return null;
         }
+    }
+
+    public static boolean isInTestingBuild() {
+        return BuildConfig.FLAVOR.equals("ciDebug");
     }
 }

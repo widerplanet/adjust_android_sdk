@@ -1,6 +1,9 @@
 package com.adjust.sdk;
 
 import android.content.Context;
+import android.net.TrafficStats;
+import android.os.Build;
+import android.util.Log;
 
 import java.io.IOException;
 import java.net.URL;
@@ -40,6 +43,7 @@ public class AdjustFactory {
     public static class URLGetConnection {
         HttpsURLConnection httpsURLConnection;
         URL url;
+
         URLGetConnection(HttpsURLConnection httpsURLConnection, URL url) {
             this.httpsURLConnection = httpsURLConnection;
             this.url = url;
@@ -134,7 +138,10 @@ public class AdjustFactory {
 
     public static HttpsURLConnection getHttpsURLConnection(URL url) throws IOException {
         if (AdjustFactory.httpsURLConnection == null) {
-            return (HttpsURLConnection)url.openConnection();
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+                TrafficStats.setThreadStatsTag(123);
+            }
+            return (HttpsURLConnection) url.openConnection();
         }
 
         return AdjustFactory.httpsURLConnection;
@@ -174,7 +181,7 @@ public class AdjustFactory {
             Adjust.defaultInstance.teardown(deleteState);
         }
         Adjust.defaultInstance = null;
-        if(deleteState) {
+        if (deleteState) {
             ActivityHandler.deleteState(context);
             PackageHandler.deleteState(context);
         }
@@ -242,6 +249,11 @@ public class AdjustFactory {
     }
 
     public static void setTestingMode(String baseUrl) {
+        if (!Util.isInTestingBuild()) {
+            Log.wtf("Adjust", "setTestingMode: Invoked a testing method from a non-test related build");
+            return;
+        }
+
         AdjustFactory.baseUrl = baseUrl;
         AdjustFactory.connectionOptions = new UtilNetworking.IConnectionOptions() {
             @Override
@@ -256,10 +268,12 @@ public class AdjustFactory {
                                     getLogger().verbose("getAcceptedIssuers");
                                     return null;
                                 }
+
                                 public void checkClientTrusted(
                                         X509Certificate[] certs, String authType) {
                                     getLogger().verbose("checkClientTrusted ");
                                 }
+
                                 public void checkServerTrusted(
                                         X509Certificate[] certs, String authType) throws CertificateException {
                                     getLogger().verbose("checkServerTrusted ");

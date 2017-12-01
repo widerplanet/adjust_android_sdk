@@ -12,6 +12,7 @@ import com.adjust.sdk.AdjustAttribution;
 import com.adjust.sdk.AdjustConfig;
 import com.adjust.sdk.AdjustEventFailure;
 import com.adjust.sdk.AdjustEventSuccess;
+import com.adjust.sdk.AdjustFactory;
 import com.adjust.sdk.LogLevel;
 import com.adjust.sdk.OnAttributionChangedListener;
 import com.adjust.sdk.OnDeeplinkResponseListener;
@@ -55,6 +56,8 @@ public class GlobalApplication extends Application {
 
         // Change the log level.
         config.setLogLevel(LogLevel.VERBOSE);
+
+        AdjustFactory.setTestingMode("aaa");
 
         // Set attribution delegate.
         config.setOnAttributionChangedListener(new OnAttributionChangedListener() {

@@ -1,6 +1,8 @@
 package com.adjust.sdk;
 
+import android.net.TrafficStats;
 import android.net.Uri;
+import android.os.Build;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -85,7 +87,7 @@ public class UtilNetworking {
 
             Uri uri = buildUri(activityPackage.getPath(), parameters, basePath);
             URL url = new URL(uri.toString());
-            
+
             HttpsURLConnection connection = AdjustFactory.getHttpsURLConnection(url);
             IConnectionOptions connectionOptions = AdjustFactory.getConnectionOptions();
 
