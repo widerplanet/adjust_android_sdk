@@ -1,6 +1,8 @@
 package com.adjust.sdk;
 
 import android.content.Context;
+import android.net.TrafficStats;
+import android.os.Build;
 
 import java.io.IOException;
 import java.net.URL;
@@ -121,6 +123,10 @@ public class AdjustFactory {
 
     public static HttpsURLConnection getHttpsURLConnection(URL url) throws IOException {
         if (AdjustFactory.httpsURLConnection == null) {
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+                TrafficStats.setThreadStatsTag(1337);
+            }
             return (HttpsURLConnection)url.openConnection();
         }
 
