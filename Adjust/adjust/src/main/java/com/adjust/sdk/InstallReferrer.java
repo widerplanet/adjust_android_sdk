@@ -113,14 +113,15 @@ public class InstallReferrer implements InvocationHandler {
             }
         }, "InstallReferrer");
         activityHandlerWeakRef = new WeakReference<IActivityHandler>(activityHandler);
-
-        startConnection();
     }
 
     /**
      * Start connection with install referrer service.
      */
-    private void startConnection() {
+    public void startConnection() {
+        if (!AdjustFactory.getTryInstallReferrer()) {
+            return;
+        }
         closeReferrerClient();
 
         synchronized (flagLock) {
